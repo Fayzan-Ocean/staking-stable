@@ -1,14 +1,20 @@
-import Image from 'next/image'
+
+"use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Deposit from '@/components/DepositTab'
 import Withdraw from '@/components/WithdrawTab'
 import DepositCard from '@/components/DepositCard'
+import { useAccount } from 'wagmi'
+
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
 
-  <div className='flex justify-center w-full'>
+  const { address, isConnecting, isDisconnected } = useAccount()
+
+  return (
+    <main className="flex min-h-screen flex-col items-center  p-24">
+
+  <div className='flex justify-center w-full pb-20'>
     
     <Tabs defaultValue="deposit" className="w-full">
 
@@ -31,7 +37,8 @@ export default function Home() {
 </Tabs></div>
 
 <div className='flex justify-center w-full'>
-  <DepositCard />
+ 
+  <DepositCard isDeposit={true} />
 </div>
    
    
