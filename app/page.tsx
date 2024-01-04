@@ -6,11 +6,25 @@ import Withdraw from '@/components/WithdrawTab'
 import DepositCard from '@/components/DepositCard'
 import { useAccount } from 'wagmi'
 import TransactionTable from "@/components/TransactionsTable"
+import { columns } from "./transactions/columns"
+import { DataTable } from "./transactions/data-table"
+import useTransactions from "@/hooks/useTransactions"
+import { useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 
 export default function Home() {
 
   const { address, isConnecting, isDisconnected } = useAccount()
+
+  const {error, loading, transactions, refetchTransactions } = useTransactions(address)
+
+
+
+  useEffect(()=>{
+    refetchTransactions()
+  },[address,isDisconnected])
 
   return (
     <main className="flex min-h-screen flex-col items-center  xl:p-24 p-8 lg:p-24 md:p-24">
@@ -42,10 +56,15 @@ export default function Home() {
   <DepositCard isDeposit={true} />
 </div>
 
-<div className='flex justify-start w-full'>
- 
-  <TransactionTable  />
-</div>
+<div className=" mx-auto py-10 w-full">
+  <div className="flex justify-end py-4">
+    <Button className=" flex gap-2 rounded-full " variant={'outline'} onClick={(e)=>{ e.preventDefault() 
+      refetchTransactions()}}>
+      <ReloadIcon className="hover:animate-spin" /> Refresh
+    </Button></div>
+  
+      <DataTable columns={columns} data={transactions } address={address}/>
+    </div>
    
    
     </main>

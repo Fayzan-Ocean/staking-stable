@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 
-interface Transaction {
-  // Define the structure of your transaction object
-  // based on what your API returns
-  // Example:
-  id: number;
-  amount: number;
-  // ... other fields
-}
+import { Transaction, columns } from "../app/transactions/columns"
 
 const useTransactions = (address: string | undefined) => {
   // State to hold the fetched transactions
@@ -17,18 +10,48 @@ const useTransactions = (address: string | undefined) => {
   // State to handle error state
   const [error, setError] = useState<string | null>(null);
 
+const  refetchTransactions = async () =>{
+  if(address){
+    try {
+        // Fetch data from the API
+    
+        const response = await fetch(`/api/transactions?ethAddress=${address}`); // Update the API endpoint accordingly
+        const data = await response.json();
+
+        //console.log(data)
+
+        // Check if the request was successful
+        if (response.ok) {
+          setTransactions(data.sortedTxs);
+        } else {
+          // Handle API error
+          setError(data.message || 'Failed to fetch transactions');
+        }
+      } catch (error) {
+        // Handle general fetch error
+        setError('Failed to fetch transactions');
+      } finally {
+        // Set loading to false once the request is complete
+        setLoading(false);
+      }
+}
+}
+
   useEffect(() => {
     const fetchData = async () => {
+     
         if(address){
             try {
                 // Fetch data from the API
             
                 const response = await fetch(`/api/transactions?ethAddress=${address}`); // Update the API endpoint accordingly
                 const data = await response.json();
+
+                //console.log(data)
         
                 // Check if the request was successful
                 if (response.ok) {
-                  setTransactions(data.transactions);
+                  setTransactions(data.sortedTxs);
                 } else {
                   // Handle API error
                   setError(data.message || 'Failed to fetch transactions');
@@ -41,35 +64,17 @@ const useTransactions = (address: string | undefined) => {
                 setLoading(false);
               }
         }
-        else{
-            try {
-                // Fetch data from the API
-            
-                const response = await fetch(`/api/transactions`); // Update the API endpoint accordingly
-                const data = await response.json();
-        
-                // Check if the request was successful
-                if (response.ok) {
-                setTransactions(data.transactions);
-                } else {
-                // Handle API error
-                setError(data.message || 'Failed to fetch transactions');
-                }
-            } catch (error) {
-                // Handle general fetch error
-                setError('Failed to fetch transactions');
-            } finally {
-                // Set loading to false once the request is complete
-                setLoading(false);
-            }
-        }
+
+      
+       
     };
 
     // Call the fetch function
     fetchData();
-  }, []); // Empty dependency array ensures that this effect runs once when the component mounts
+  }, [address]); // Empty dependency array ensures that this effect runs once when the component mounts
 
-  return { transactions, loading, error };
+  return { transactions, loading, error, refetchTransactions  };
 };
 
 export default useTransactions;
+

@@ -26,7 +26,7 @@ const Usdc = () => {
         </g>
         <defs>
           <clipPath id="clip0_339_136">
-            <rect width={20} height={20} fill="currentColor" />
+            <rect width={40} height={40} fill="currentColor" />
           </clipPath>
         </defs>
       </svg></> );

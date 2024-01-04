@@ -14,9 +14,7 @@ import Usdt from "./icons/Usdt";
 const TableTx = (transactions: any, loading: any) => {
 
    
-    useEffect(()=>{
-        console.log(transactions)
-            },[transactions])
+   
     return ( <>
 
     <Table>
