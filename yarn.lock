@@ -52,6 +52,11 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
+"@e965/xlsx@^0.20.0":
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/@e965/xlsx/-/xlsx-0.20.1.tgz#7336393702d18a9f6f5a37c3384612daf4927b8f"
+  integrity sha512-zRv8NLB1H6aqQyZt3/gLjd0xkZsH+/WIRi4YHAw1koESNTPPmzXJbPqO2HMN7DZB1vnF1USKxQ9ZvS0S9Lqmbg==
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"
@@ -3528,6 +3533,13 @@ js-yaml@^4.1.0:
   integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
   dependencies:
     argparse "^2.0.1"
+
+json-as-xlsx@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/json-as-xlsx/-/json-as-xlsx-2.5.6.tgz#c8f9fd1c374ba4762a8c524d079276dbf17e7d34"
+  integrity sha512-z7phlB+VgS9wZv2N4SBKlguC3C7uauSj2PYSZICCrPaiu1lu8zkCpzZ4sOHWi0/3Je0CJl87q+J+3mpZbxpOew==
+  dependencies:
+    "@e965/xlsx" "^0.20.0"
 
 json-buffer@3.0.1:
   version "3.0.1"
