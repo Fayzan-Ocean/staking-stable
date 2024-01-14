@@ -26,7 +26,7 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-  import { useSendTransaction, usePrepareSendTransaction } from 'wagmi'
+  import { useSendTransaction, usePrepareSendTransaction,useContractRead  } from 'wagmi'
 import { parseEther, parseUnits } from "viem"
 import { useNetwork } from 'wagmi'
 import { networkData } from "@/lib/chainData"
@@ -36,7 +36,7 @@ import { useDebounce } from 'usehooks-ts'
 
 
 
-const DepositCardUsdc = () => {
+const DepositUsdc = () => {
 
     const [hasMounted, setHasMounted] = useState(false);
   const [usdc, setUsdc] = useState(0.0);
@@ -58,23 +58,48 @@ const DepositCardUsdc = () => {
         },
         })
 
-    const { config: configUsdc } = usePrepareContractWrite({
+    const { data:allowanceData, isError:allowanceError, isLoading:allowanceLoading } = useContractRead({
+        address: networkData.find((i)=>{return i.chainId == chain?.id})?.usdcAddress as `0x${string}`,
+        abi: [{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
+       functionName:"allowance",
+        args: [
+            
+            address,// convert to wei,
+            "0x79395BC913B8bdDD18753A0fD62f95ED76D64701"
+        ],
+        chainId: chain?.id, 
+       
+    })
+
+    const { config: configUsdcApprove } = usePrepareContractWrite({
             address: networkData.find((i)=>{return i.chainId == chain?.id})?.usdcAddress as `0x${string}`,
             abi: [{
                 "constant": false,
                 "inputs": [
-                    {"name":"_to","type":"address"},
-                    {"name":"_value","type":"uint256"}
+                    {"name":"spender","type":"address"},
+                    {"name":"value","type":"uint256"}
                 ],
-                "name":"transfer",
+                "name":"approve",
                 "outputs": [{"name":"success","type":"bool"}],
                 "stateMutability": "nonpayable",
                 "type": "function"
             }],
-            functionName: "transfer",
+            functionName: "approve",
             args: [
-                "0x2dE9238f3C4A21c9507dc951ace0FadF80e93Ff2",
+                "0x79395BC913B8bdDD18753A0fD62f95ED76D64701",
                 parseUnits(String(usdc) || "0",6) // convert to wei
+            ],
+            chainId: chain?.id, 
+           
+        })
+
+    const { config: configUsdc } = usePrepareContractWrite({
+            address: "0x79395BC913B8bdDD18753A0fD62f95ED76D64701",
+            abi: [{"inputs":[{"internalType":"uint256","name":"_usdAmount","type":"uint256"},{"internalType":"bool","name":"isUsdc","type":"bool"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+            functionName: "deposit",
+            args: [
+                parseUnits(String(usdc) || "0",6), // convert to wei
+                true
             ],
             chainId: chain?.id, 
            
@@ -89,11 +114,26 @@ const DepositCardUsdc = () => {
             
           } = useContractWrite(configUsdc)
 
+    const {
+            data:dataUsdcApprove,
+            isError:isErrorUsdcApprove,
+            isLoading:isLoadingUsdcApprove,
+            isSuccess:isSuccessUsdcApprove,
+            write:writeUsdcApprove,
+            
+          } = useContractWrite(configUsdcApprove)
+
     const { isLoading:isLoadingTransaction, isSuccess:isSuccessTransaction } = useWaitForTransaction({
             hash: dataUsdc?.hash ,
           })
 
-          const addTransactionData = async ()=>{
+    const { isLoading:isLoadingTransactionApprove, isSuccess:isSuccessTransactionApprove } = useWaitForTransaction({
+            hash: dataUsdcApprove?.hash ,
+          })
+
+
+
+    const addTransactionData = async ()=>{
             try {
               const depositData =  {
                 address: address,
@@ -134,8 +174,12 @@ const DepositCardUsdc = () => {
 
      // Hooks
      useEffect(() => {
-        setHasMounted(true);
-        }, [])
+        console.log(allowanceData)
+        }, [allowanceData])
+
+        useEffect(() => {
+            setHasMounted(true);
+            }, [])
 
     useEffect(() => {
           if(isErrorUsdc && !isLoadingUsdc )
@@ -238,8 +282,9 @@ const DepositCardUsdc = () => {
       <CardFooter>
       {isConnected  ? 
         <> 
-
-    <Dialog>
+        {allowanceData && Number(allowanceData) > 0 ? <>    
+        
+        <Dialog>
         <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
           
           {isLoadingUsdc || isLoadingTransaction ? <>
@@ -287,7 +332,59 @@ const DepositCardUsdc = () => {
           
         </Dialog>
         
+        </> : <>
         
+        <Dialog>
+        <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
+          
+          {isLoadingUsdcApprove || isLoadingTransactionApprove ? <>
+          <Button disabled className="flex w-full">
+          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </Button>
+        </> : <>
+        <Button className="flex w-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
+
+        //setisDepositingUsdc(true)
+        }} >
+          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Approve USDC"} 
+          </Button>
+          </>}
+          
+        
+        </DialogTrigger>
+        <DialogContent >
+            <DialogHeader className="flex justify-center align-middle">
+           
+            <div className="flex flex-col justify-center align-middle pt-4 items-center">
+            {isLoadingUsdcApprove || isLoadingTransactionApprove && !isErrorUsdcApprove ?  
+            <> 
+             <DialogTitle className="flex  justify-center align-middle items-center py-8">Waiting for Approval</DialogTitle>
+            <ReloadIcon className="mr-2 h-12 w-12 animate-spin mb-8" />
+            </> : 
+            <> {isSuccessTransactionApprove ? <div className="flex flex-col justify-center align-middle py-10 items-center gap-2">
+              
+              <CheckCircledIcon className="mr-2 h-24 w-24 animate"/>
+              Approval Successful</div> : <>
+             
+              
+              </>}
+            
+            </> }
+           
+          
+            </div>
+            </DialogHeader>
+
+
+        </DialogContent>
+        
+          
+        </Dialog>
+
+        </> }
+
+
         
         
         </>
@@ -309,7 +406,7 @@ const DepositCardUsdc = () => {
     </> );
 }
  
-export default DepositCardUsdc;
+export default DepositUsdc;
 
 function nearestMultipleOf100(numb:any) {
     return Math.round(numb / 100) * 100;

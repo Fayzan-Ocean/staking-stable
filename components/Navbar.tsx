@@ -15,7 +15,7 @@ const Navbar = () => {
         
 
 
-      <w3m-button />
+      
     </div></div>
    
 

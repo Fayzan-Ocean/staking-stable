@@ -35,6 +35,7 @@ import { useDebounce } from 'usehooks-ts'
 import prisma from '../lib/prisma';
 import DepositCardUsdc from "./DepositCardUsdc"
 import DepositCardUsdt from "./DepositCardUsdt"
+import DepositUsdc from "./Deposit/DepositUsdc"
 
 
 
@@ -67,24 +68,10 @@ const DepositCard = (props:any) => {
 <>
 {props?.isDeposit ? <>
 
-<div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 justify-between relative bg-background overflow-hidden ">
-  <DepositCardUsdc />
+<div className=" flex  w-full gap-4 justify-center relative bg-background overflow-hidden ">
 
-    <DepositCardUsdt />
-
-    <Card>
-    <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card Description</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <p>Card Content</p>
-  </CardContent>
-  <CardFooter>
-    <p>Card Footer</p>
-  </CardFooter>
-    </Card>
-
+  {props?.isUsdc ? <><DepositUsdc /></> :<> <DepositCardUsdt /></>}
+  
 </div>
 
 </> : <>

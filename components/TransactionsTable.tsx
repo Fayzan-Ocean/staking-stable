@@ -3,14 +3,33 @@ import TableTx from "./Table";
 import useTransactions from "@/hooks/useTransactions";
 import { useEffect } from "react";
 import { useAccount } from 'wagmi'
+import useSWR from 'swr'
+
 
 const TransactionTable = () => {
     const { address, isConnecting, isDisconnected } = useAccount()
 
-    const {error, loading, transactions} = useTransactions(address)
+    const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
-  
+    const { data, error, isLoading } = useSWR(`/api/transactions?ethAddress=${address}`, fetcher)
 
+  //  const {error, loading, transactions} = useTransactions(address)
+
+
+
+  const sortByDate = (trxs: any) => {
+    if(trxs?.length >0){
+       const sorted = [...trxs].sort((a, b) =>
+      new Date(a.createdAt) - new Date(b.createdAt)
+    );
+    return sorted
+    }
+    return []
+   
+  };
+  useEffect(()=>{
+    console.log(data)
+        },[data])
     
     return ( <>
     
@@ -22,7 +41,7 @@ const TransactionTable = () => {
   </TabsList>
   <TabsContent value="all"  className="rounded-md bg-slate-700">
     
-    <TableTx transactions={transactions} loading ={loading}/>
+    <TableTx transactions={sortByDate(data?.transactions)} loading ={isLoading}/>
   </TabsContent>
   <TabsContent value="deposit"  className="rounded-md bg-slate-700">
   <TableTx />

@@ -7,16 +7,15 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Usdc from "./icons/Usdc";
 import Usdt from "./icons/Usdt";
 
 const TableTx = (transactions: any, loading: any) => {
-
-   
-    useEffect(()=>{
-        console.log(transactions)
-            },[transactions])
+ 
+    // Function to sort transactions by date
+ 
+  
     return ( <>
 
     <Table>

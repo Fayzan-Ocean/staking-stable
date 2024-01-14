@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ['latin'] })
 import { Web3Modal } from "../context/Web3Modal";
 import Navbar from '@/components/Navbar'
 export const metadata: Metadata = {
-  title: 'Staking',
-  description: 'Staking app',
+  title: 'Dutch Digital Invest',
+  description: 'Dutch Digital Invest Dapp',
 }
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           ><Web3Modal>
-            <Navbar />
+            
            {children}</Web3Modal>
           </ThemeProvider>
           <Toaster /></body>

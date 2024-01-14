@@ -141,6 +141,10 @@ const addTransactionData = async ()=>{
       } 
       
     }  
+    useEffect(() => {
+      console.log("USDT",usdt)
+      
+      }, [usdt])
 
     useEffect(() => {
         if(isSuccessTransaction && !isLoadingUsdt ){
