@@ -5,54 +5,74 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const ethAddress = searchParams.get('ethAddress')
 
-  console.log("---------------------------------------------------------------")
+ 
   console.log("-------------------Transactions Fetched------------------------")
-  console.log("---------------------------------------------------------------")
 
-  if (!ethAddress ) {
+
+  console.log(ethAddress)
+
+  if (ethAddress) {
     try {
+
+        // Find the user with the specified ethAddress
+        const user = await prisma.user.findUnique({
+          where: {
+            ethAddress: ethAddress,
+          },
+          include: {
+            transactions: true,
+          },
+        });
     
-     let transactions = await prisma.transaction.findMany();
-
-   // console.log(transactions)
-
-    console.log("---------------------------------------------------------------")
-
-
-    return NextResponse.json({ message: "Transaction Added", transactions }, { status: 200 });
-  } catch (error) {
-    console.error('Error creating transaction:', error);
-    return NextResponse.json({ message: "Transaction not Added" }, { status: 500 });
-  } 
+        if (!user) {
+          console.log('User not found.');
+          return NextResponse.json({ message: "Transactions fetched", sortedTxs:[] }, { status: 200 });
+        }
     
-  }
-  
-  try {
+        // Access the transactions associated with the user
+        const transactions = user.transactions;
 
-    let user = await prisma.user.findUnique({
-      where: {
-        ethAddress:ethAddress
-      }
-    });
     
-    let transactions = await prisma.transaction.findMany({
-      where: {
-        userId:user?.id
-      }
-    });
 
-  // console.log(transactions)
-
+   //console.log(transactions)
+  const sortedTxs = sortByDateDescending(transactions)
+ // console.log(sortedTxs)
    console.log("---------------------------------------------------------------")
 
 
-   return NextResponse.json({ message: "Transaction Added", transactions }, { status: 200 });
+   return NextResponse.json({ message: "Transaction Added", sortedTxs }, { status: 200 });
  } catch (error) {
    console.error('Error creating transaction:', error);
-   return NextResponse.json({ message: "Transaction not Added" }, { status: 500 });
+   return NextResponse.json({ message: "Transaction not fetched" }, { status: 500 });
  } 
+    
+  }
+  else{
+    try {
+
+      // Find the user with the specified ethAddress
+      const transactions = await prisma.transaction.findMany();
+
+  
+
+ //console.log(transactions)
+const sortedTxs = sortByDateDescending(transactions)
+// console.log(sortedTxs)
+ console.log("---------------------------------------------------------------")
+
+
+ return NextResponse.json({ message: "Transaction Added", sortedTxs }, { status: 200 });
+} catch (error) {
+ console.error('Error creating transaction:', error);
+ return NextResponse.json({ message: "Transaction not fetched" }, { status: 500 });
+} 
+  }
   
 
  
+ 
+}
+function sortByDateDescending(array: any[]) {
+  return array.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(b.createdAt) - new Date(a.createdAt));
 }
 
