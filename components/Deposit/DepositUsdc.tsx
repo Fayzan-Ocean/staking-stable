@@ -52,22 +52,25 @@ const DepositUsdc = () => {
         address: address,
         token: networkData.find((i)=>{return i.chainId == chain?.id})?.usdcAddress as `0x${string}`,
       
-        staleTime: 2_000,
+        staleTime: 2000,
         onSettled(data:any, error:any) {
-          console.log('Settled', { data, error })
+          console.log('Balance', { data, error })
         },
+        
         })
 
     const { data:allowanceData, isError:allowanceError, isLoading:allowanceLoading } = useContractRead({
         address: networkData.find((i)=>{return i.chainId == chain?.id})?.usdcAddress as `0x${string}`,
         abi: [{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
        functionName:"allowance",
+     
         args: [
-            
             address,// convert to wei,
-            "0x79395BC913B8bdDD18753A0fD62f95ED76D64701"
+            networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`
         ],
         chainId: chain?.id, 
+        watch:true,
+      
        
     })
 
@@ -86,15 +89,16 @@ const DepositUsdc = () => {
             }],
             functionName: "approve",
             args: [
-                "0x79395BC913B8bdDD18753A0fD62f95ED76D64701",
+              networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
                 parseUnits(String(usdc) || "0",6) // convert to wei
             ],
             chainId: chain?.id, 
+          
            
         })
 
     const { config: configUsdc } = usePrepareContractWrite({
-            address: "0x79395BC913B8bdDD18753A0fD62f95ED76D64701",
+            address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
             abi: [{"inputs":[{"internalType":"uint256","name":"_usdAmount","type":"uint256"},{"internalType":"bool","name":"isUsdc","type":"bool"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"}],
             functionName: "deposit",
             args: [
@@ -102,6 +106,7 @@ const DepositUsdc = () => {
                 true
             ],
             chainId: chain?.id, 
+            staleTime: 2000,
            
         })
     
@@ -173,9 +178,9 @@ const DepositUsdc = () => {
 
 
      // Hooks
-     useEffect(() => {
+/*      useEffect(() => {
         console.log(allowanceData)
-        }, [allowanceData])
+        }, [allowanceData]) */
 
         useEffect(() => {
             setHasMounted(true);
@@ -343,7 +348,7 @@ const DepositUsdc = () => {
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
+        <Button className="flex w-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
 
         //setisDepositingUsdc(true)
         }} >
