@@ -18,6 +18,7 @@ import Withdraw from '@/components/WithdrawTab'
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import DepositCard from '@/components/DepositCard'
+import TransactionTable from '@/components/TransactionsTable'
 
 const Home = () => {
 
@@ -112,8 +113,14 @@ const Home = () => {
             </div>
             <div className='flex justify-center w-full pb-16'>
  
-  <DepositCard isDeposit={true} isUsdc={true} />
-</div>
+              <DepositCard isDeposit={true} isUsdc={true} />
+
+
+            </div>
+          {/*   <div className='flex justify-start w-full'>
+ 
+              <TransactionTable  />
+            </div> */}
         <div>
         <TabsList className='p-0 bg-transparent flex gap-2'>
 
