@@ -38,7 +38,7 @@ import { useDebounce } from 'usehooks-ts'
 
 const DepositUsdc = () => {
 
-    const [hasMounted, setHasMounted] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const [usdc, setUsdc] = useState(0.0);
   const [usdt, setUsdt] = useState(0.0);
   const [isDepositingUsdcError, setisDepositingUsdcError] = useState(false);
@@ -287,7 +287,7 @@ const DepositUsdc = () => {
       <CardFooter>
       {isConnected  ? 
         <> 
-        {allowanceData && Number(allowanceData) > 0 ? <>    
+        {allowanceData && Number(allowanceData) >= Number(parseUnits(String(usdc),6)) ? <>    
         
         <Dialog>
         <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
