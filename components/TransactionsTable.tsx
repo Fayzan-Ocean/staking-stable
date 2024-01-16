@@ -42,7 +42,7 @@ const TransactionTable = () => {
     <TabsTrigger value="withdraw">Withdrawls</TabsTrigger>
   </TabsList>
   <TabsContent value="all"  className="rounded-md bg-slate-700">
-  <DataTable columns={columns} data={sortByDate(data?.sortedTxs) } address={address}/>
+  <DataTable columns={columns} data={data?.sortedTxs } address={address}/>
    {/*  <TableTx transactions={sortByDate(data?.sortedTxs)} loading ={isLoading}/> */}
   </TabsContent>
   <TabsContent value="deposit"  className="rounded-md bg-slate-700">

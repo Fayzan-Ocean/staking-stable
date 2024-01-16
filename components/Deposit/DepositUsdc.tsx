@@ -32,6 +32,7 @@ import { useNetwork } from 'wagmi'
 import { networkData } from "@/lib/chainData"
 import { toast } from "sonner"
 import { useDebounce } from 'usehooks-ts'
+import { cn } from "@/lib/utils"
 
 
 
@@ -188,11 +189,16 @@ const DepositUsdc = () => {
 
     useEffect(() => {
           if(isErrorUsdc && !isLoadingUsdc )
-          toast.error("Deposit Unsuccessfull :(", {      
+          toast.error("Deposit Unsuccessfull :(", {
+            className: cn(
+              'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4'
+            ),      
             action: {
               label: "ok",
               onClick: () => console.log("ok"),
+              
             },
+          
           })
           }, [isErrorUsdc])
 
@@ -270,7 +276,9 @@ const DepositUsdc = () => {
           <Input type="number" placeholder="0" step="0" value={usdc} min={0}  onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDC?.data?.formatted)){
               toast.warning("Amount you entered is more than your balance :(", {
-                
+                className: cn(
+                  'absolute '
+                ), 
                 action: {
                   label: "Undo",
                   onClick: () => console.log("Undo"),
