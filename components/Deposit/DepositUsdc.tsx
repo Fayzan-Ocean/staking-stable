@@ -210,7 +210,7 @@ const DepositUsdc = () => {
 
     return ( <>
     
-    <Card className="relative overflow-hidden">
+    <Card className="relative overflow-hidden w-[33%]">
       <CardHeader className="">
       <div className="absolute top-4 -left-3 rounded-full overflow-hidden">
       <svg

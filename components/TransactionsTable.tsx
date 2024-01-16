@@ -4,6 +4,8 @@ import useTransactions from "@/hooks/useTransactions";
 import { useEffect } from "react";
 import { useAccount } from 'wagmi'
 import useSWR from 'swr'
+import { columns } from "@/app/transactions/columns";
+import { DataTable } from "@/app/transactions/data-table";
 
 
 const TransactionTable = () => {
@@ -40,8 +42,8 @@ const TransactionTable = () => {
     <TabsTrigger value="withdraw">Withdrawls</TabsTrigger>
   </TabsList>
   <TabsContent value="all"  className="rounded-md bg-slate-700">
-    
-    <TableTx transactions={sortByDate(data?.transactions)} loading ={isLoading}/>
+  <DataTable columns={columns} data={sortByDate(data?.sortedTxs) } address={address}/>
+   {/*  <TableTx transactions={sortByDate(data?.sortedTxs)} loading ={isLoading}/> */}
   </TabsContent>
   <TabsContent value="deposit"  className="rounded-md bg-slate-700">
   <TableTx />
