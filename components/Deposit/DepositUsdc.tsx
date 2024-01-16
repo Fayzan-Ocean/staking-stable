@@ -190,9 +190,7 @@ const DepositUsdc = () => {
     useEffect(() => {
           if(isErrorUsdc && !isLoadingUsdc )
           toast.error("Deposit Unsuccessfull :(", {
-            className: cn(
-              'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4'
-            ),      
+              
             action: {
               label: "ok",
               onClick: () => console.log("ok"),
@@ -202,9 +200,20 @@ const DepositUsdc = () => {
           })
           }, [isErrorUsdc])
 
+
+
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdc ){
                 addTransactionData()
+                toast.info("Deposit Successfull :>", {
+                 
+                  action: {
+                    label: "ok",
+                    onClick: () => console.log("ok"),
+                    
+                  },
+                
+                })
             }
             
             }, [isSuccessTransaction])
@@ -310,6 +319,8 @@ const DepositUsdc = () => {
           <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Deposit"} 
           </Button>
           </>}    
+
+      
         
        {/*  <Dialog>
         <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>

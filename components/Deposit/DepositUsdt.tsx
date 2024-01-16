@@ -198,6 +198,15 @@ const DepositUsdt = () => {
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdt ){
                 addTransactionData()
+                toast.info("Deposit Successfull :>", {
+                 
+                  action: {
+                    label: "ok",
+                    onClick: () => console.log("ok"),
+                    
+                  },
+                
+                })
             }
             
             }, [isSuccessTransaction])
