@@ -29,7 +29,7 @@ export default function RootLayout({
             <Navbar />
            {children}</Web3Modal>
           </ThemeProvider>
-          <Toaster /></body>
+          <Toaster richColors  position="top-right" /></body>
     </html>
   )
 }

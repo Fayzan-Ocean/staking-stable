@@ -205,7 +205,7 @@ const DepositUsdc = () => {
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdc ){
                 addTransactionData()
-                toast.info("Deposit Successfull :>", {
+                toast.success("Deposit Successfull :>", {
                  
                   action: {
                     label: "ok",
