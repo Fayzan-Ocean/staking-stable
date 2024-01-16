@@ -282,7 +282,7 @@ const DepositUsdc = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center ">
         
-          <Input type="number" placeholder="0" step="0" value={usdc} min={0}  onChange={(e)=>{
+          <Input type="number" placeholder="0" step="10" value={usdc} min={0}  onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDC?.data?.formatted)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(

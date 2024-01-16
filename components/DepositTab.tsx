@@ -43,8 +43,8 @@ const Deposit = () => {
         if (userData && Array.isArray(userData) && userData.length > 0) {
             let dataa = { 
                 totalDeposit : formatUnits(userData[0],6),
-                totalWithdraw : formatUnits(userData[1],6),
-                accountBalance: Number(formatUnits(userData[0],6)) - Number(formatUnits(userData[1],6))
+                totalWithdraw : formatUnits(userData[1],18),
+                accountBalance: Number(formatUnits(userData[0],6)) - (Number(formatUnits(userData[1],18)) *10)
             }
             setuserTotalData(dataa);
         }

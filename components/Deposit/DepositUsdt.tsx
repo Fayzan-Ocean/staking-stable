@@ -265,7 +265,7 @@ const DepositUsdt = () => {
       </svg>
     </div>
 
-        <CardTitle>USDC</CardTitle>
+        <CardTitle>USDT</CardTitle>
       
       </CardHeader>
       <CardContent className="flex flex-col justify-between  w-full">
@@ -279,7 +279,7 @@ const DepositUsdt = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center ">
         
-          <Input type="number" placeholder="0" step="0" value={usdt} min={0}  onChange={(e)=>{
+          <Input type="number" placeholder="0" step="10" value={usdt} min={0}  onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDT?.data?.formatted)){
               toast.warning("Amount you entered is more than your balance :(", {
                 
