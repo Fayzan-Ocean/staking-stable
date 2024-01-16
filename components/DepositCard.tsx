@@ -76,7 +76,7 @@ const DepositCard = (props:any) => {
 
 </> : <>
 
-<div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 justify-between relative bg-background overflow-hidden">
+<div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 justify-between relative bg-background overflow-hidden ">
 
     <Card className="">
       <CardHeader className="">
@@ -124,7 +124,7 @@ const DepositCard = (props:any) => {
         <CardTitle>USDC</CardTitle>
       
       </CardHeader>
-      <CardContent className="flex flex-col justify-between  w-full">
+      <CardContent className="flex flex-col justify-between  w-full ">
         <div className="flex justify-between">
             <p className="flex justify-start text-xs pl-2 pb-2">Amount</p>
             <p className="flex justify-start text-xs pl-2 pb-2">0.0 available</p>

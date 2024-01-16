@@ -295,9 +295,12 @@ const DepositUsdc = () => {
       <CardFooter>
       {isConnected  ? 
         <> 
-        {allowanceData && Number(allowanceData) >= Number(parseUnits(String(usdc),6)) ? <>
-
-              {isLoadingUsdc || isLoadingTransaction ? <>
+        {allowanceData && Number(allowanceData) >= Number(parseUnits(String(usdc),6)) ? <>    
+        
+        <Dialog>
+        <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
+          
+          {isLoadingUsdc || isLoadingTransaction ? <>
           <Button disabled className="flex w-full">
           <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           Please wait
@@ -309,12 +312,7 @@ const DepositUsdc = () => {
         }} >
           <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Deposit"} 
           </Button>
-          </>}    
-        
-       {/*  <Dialog>
-        <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
-          
-    
+          </>}
           
         
         </DialogTrigger>
@@ -345,19 +343,19 @@ const DepositUsdc = () => {
         </DialogContent>
         
           
-        </Dialog> */}
+        </Dialog>
         
         </> : <>
-
-
-        {isLoadingUsdcApprove || isLoadingTransactionApprove ? 
-          <>
+        
+        <Dialog>
+        <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
+          
+          {isLoadingUsdcApprove || isLoadingTransactionApprove ? <>
           <Button disabled className="flex w-full">
           <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           Please wait
         </Button>
-        </> : 
-        <>
+        </> : <>
         <Button className="flex w-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
 
         //setisDepositingUsdc(true)
@@ -365,10 +363,6 @@ const DepositUsdc = () => {
           <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Approve USDC"} 
           </Button>
           </>}
-    {/*     <Dialog>
-        <DialogTrigger className="flex w-full" disabled={ Number(balanceUSDC?.data?.formatted)<0}>
-          
-      
           
         
         </DialogTrigger>
@@ -399,7 +393,7 @@ const DepositUsdc = () => {
         </DialogContent>
         
           
-        </Dialog> */}
+        </Dialog>
 
         </> }
 
