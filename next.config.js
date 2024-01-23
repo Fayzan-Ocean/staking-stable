@@ -8,6 +8,17 @@ const nextConfig = {
  
       ignoreBuildErrors: true,
     },
+    images: {
+      domains: ['via.placeholder.com','placeholder.com'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '**.placeholder.com',
+          port: '',
+          pathname: '/',
+        },
+      ],
+    },
   }
 
 module.exports = nextConfig

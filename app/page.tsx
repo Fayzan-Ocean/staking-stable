@@ -14,6 +14,7 @@ import DepositUsdc from "@/components/Deposit/DepositUsdc"
 import DepositUsdt from "@/components/Deposit/DepositUsdt"
 import WithdrawUsdc from "@/components/Withdraw/WithdrawUsdc"
 import WithdrawUsdt from "@/components/Withdraw/WithdrawUsdt"
+import DepositCards from "@/components/Deposit/DepositCards"
 
 
 
@@ -22,10 +23,14 @@ export default function Home() {
   const { address, isConnecting, isDisconnected } = useAccount()
 
   return (
-    <main className="flex  flex-col items-center  xl:px-24 p-8 lg:px-24 md:px-24">
+    <main className="flex  flex-col items-center ">
+
+
+    <DepositCards />
+   
       
 
-  <div className='flex justify-center w-full pb-10'>
+  <div className='flex justify-center w-full pb-10  xl:px-24 p-8 lg:px-24 md:px-24 bg-[#EFEFEF]'>
     
     <Tabs defaultValue="deposit" className="w-full">
 

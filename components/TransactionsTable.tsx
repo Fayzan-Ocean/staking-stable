@@ -29,29 +29,37 @@ const TransactionTable = () => {
     return []
    
   };
-  useEffect(()=>{
-    console.log(data)
-        },[data])
+
+
+  function filterData(objectArray, targetType) {
+    return objectArray ? objectArray.filter(obj => obj.type === targetType) : [];
+  }
+
     
     return ( <>
     
-    <Tabs defaultValue="all" className=" w-full ">
-  <TabsList>
-    <TabsTrigger value="all">All</TabsTrigger>
-    <TabsTrigger value="deposit">Deposits</TabsTrigger>
-    <TabsTrigger value="withdraw">Withdrawls</TabsTrigger>
-  </TabsList>
-  <TabsContent value="all"  className="rounded-md bg-slate-700">
-  <DataTable columns={columns} data={data?.sortedTxs || []} address={address}/>
-   {/*  <TableTx transactions={sortByDate(data?.sortedTxs)} loading ={isLoading}/> */}
-  </TabsContent>
-  <TabsContent value="deposit"  className="rounded-md bg-slate-700">
-  <TableTx />
-  </TabsContent>
-  <TabsContent value="withdraw"  className="rounded-md bg-slate-700">
-  <TableTx />
-  </TabsContent>
-</Tabs>
+    <Tabs defaultValue="all" className=" w-full border rounded-2xl p-8 bg-[#EFEFEF]">
+      
+      <TabsList className="bg-[#EFEFEF]">
+        <TabsTrigger value="all" className="bg-[#EFEFEF]">All</TabsTrigger>
+        <TabsTrigger value="deposit">Deposits</TabsTrigger>
+        <TabsTrigger value="withdraw">Withdrawls</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="all"  className="rounded-md bg-[#EFEFEF]">
+      <DataTable columns={columns} data={data?.sortedTxs || []} address={address}/>
+      {/*  <TableTx transactions={sortByDate(data?.sortedTxs)} loading ={isLoading}/> */}
+      </TabsContent>
+
+      <TabsContent value="deposit"  className="rounded-md bg-[#EFEFEF] text-black border-0">
+      <DataTable columns={columns} data={filterData(data?.sortedTxs,'deposit') || []} address={address}/>
+      </TabsContent>
+
+      <TabsContent value="withdraw"  className="rounded-md bg-[#EFEFEF] text-black">
+      <DataTable columns={columns} data={filterData(data?.sortedTxs,'withdraw') || []} address={address}/>
+      </TabsContent>
+
+    </Tabs>
     
     </> );
 }

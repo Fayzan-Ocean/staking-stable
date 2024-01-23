@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
-  import { ReloadIcon } from "@radix-ui/react-icons"
+  import {  ReloadIcon } from "@radix-ui/react-icons"
   import { RocketIcon,LockClosedIcon, CheckIcon, CheckCircledIcon } from "@radix-ui/react-icons"
   import { Input } from "@/components/ui/input"
   import { Button } from "@/components/ui/button"
@@ -33,6 +33,7 @@ import { networkData } from "@/lib/chainData"
 import { toast } from "sonner"
 import { useDebounce } from 'usehooks-ts'
 import { cn } from "@/lib/utils"
+import { ChevronUpIcon,ChevronDownIcon } from "lucide-react"
 
 
 
@@ -218,6 +219,20 @@ const DepositUsdc = () => {
             
             }, [isSuccessTransaction])
 
+    useEffect(() => {
+      if(address && usdc > Number(balanceUSDC?.data?.formatted)){
+        toast.warning("Amount you entered is more than your balance :(", {
+          className: cn(
+            'absolute '
+          ), 
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        })
+      }
+              }, [usdc])
+
           
           
  // Render
@@ -225,10 +240,10 @@ const DepositUsdc = () => {
 
     return ( <>
     
-    <Card className="relative overflow-hidden w-[33%]">
+    <Card className="relative overflow-hidden bg-transparent text-black w-full">
       <CardHeader className="">
       <div className="absolute top-4 -left-3 rounded-full overflow-hidden">
-      <svg
+     {/*  <svg
         style={{
           display: "inline-block",
           width: "1em",
@@ -265,24 +280,24 @@ const DepositUsdc = () => {
             <rect width={40} height={40} fill="currentColor" />
           </clipPath>
         </defs>
-      </svg>
+      </svg> */}
     </div>
 
         <CardTitle>USDC</CardTitle>
       
       </CardHeader>
-      <CardContent className="flex flex-col justify-between  w-full">
+      <CardContent className="flex flex-col justify-between text-sm text-black font-medium  w-full">
         <div className="flex justify-between">
-            <p className="flex justify-start text-xs pl-2 pb-2">Amount</p>
-            <p className="flex justify-start text-xs pl-2 pb-2"> <span className="flex gap-1 mr-2">
+            <p className="flex justify-start text-sm pl-2 pb-2">Amount</p>
+            <p className="flex justify-start text-sm text-black font-medium pl-2 pb-2"> <span className="flex gap-1 mr-2">
               
               {balanceUSDC?.data?.formatted ? balanceUSDC?.data?.formatted : "0"} {balanceUSDC?.data?.symbol ? balanceUSDC?.data?.symbol : "USDC"} </span> <span className="text-slate-500">available</span> </p>
         </div>
       
         
-      <div className="flex justify-center w-full max-w-full gap-1 items-center ">
+      <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="0" step="10" value={usdc} min={0}  onChange={(e)=>{
+          <Input type="number" placeholder="0" step="10" value={usdc} min={0}   onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDC?.data?.formatted)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(
@@ -296,10 +311,24 @@ const DepositUsdc = () => {
             }
             
             setUsdc(Number(e.target.value))
-            }} className=" w-[90%]"/>
-          <Button type="submit" className="flex hover:bg-slate-700 hover:text-white" 
-          onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDC?.data?.formatted)))} disabled={Number(balanceUSDC?.data?.formatted)<0} >Max</Button>
+            }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-none"/>
+
+            <div className="flex gap-1">
+            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
+              setUsdc(usdc+100)
+              }}> <ChevronUpIcon  width={18}/></div> 
+            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
+            onClick={()=>{
+              usdc-100 > 0 ? setUsdc(usdc-100) : null
+              }}
+              > <ChevronDownIcon width={18} /></div></div>
+            
+      {address? <> <Button type="submit" className="flex bg-black hover:bg-slate-900 hover:text-white text-white rounded-full" 
+          onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDC?.data?.formatted)))} disabled={Number(balanceUSDC?.data?.formatted)<0} >Max</Button> </> : <></>}
+         
         </div>
+
+ 
       </CardContent>
       <CardFooter>
       {isConnected  ? 
@@ -307,16 +336,16 @@ const DepositUsdc = () => {
         {allowanceData && Number(allowanceData) >= Number(parseUnits(String(usdc),6)) ? <>
 
               {isLoadingUsdc || isLoadingTransaction ? <>
-          <Button disabled className="flex w-full">
+          <Button disabled className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full">
           <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdc?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdc?.()
 
         //setisDepositingUsdc(true)
         }} >
-          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Deposit"} 
+          <RocketIcon className="mr-2 h-4 w-4 " /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Deposit"} 
           </Button>
           </>}    
 
@@ -363,13 +392,13 @@ const DepositUsdc = () => {
 
         {isLoadingUsdcApprove || isLoadingTransactionApprove ? 
           <>
-          <Button disabled className="flex w-full">
+          <Button disabled className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full">
           <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           Please wait
         </Button>
         </> : 
         <>
-        <Button className="flex w-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
 
         //setisDepositingUsdc(true)
         }} >
@@ -420,7 +449,7 @@ const DepositUsdc = () => {
         </>
         
         : <> 
-        <Button className="flex w-full hover:bg-slate-700 hover:text-white hover:transition-width  transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg" onClick={()=>{
+        <Button className="flex w-full  hover:text-white hover:transition-width  transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg bg-black text-white hover:bg-slate-900 rounded-full" onClick={()=>{
           open()}} >
           <LockClosedIcon className="mr-2 h-4 w-4"/> Connect Wallet
         </Button>

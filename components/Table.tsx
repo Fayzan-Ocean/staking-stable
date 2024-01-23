@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import Usdc from "./icons/Usdc";
 import Usdt from "./icons/Usdt";
+import { Link1Icon } from "@radix-ui/react-icons";
 
 const TableTx = (transactions: any, loading: any) => {
  
@@ -18,10 +19,10 @@ const TableTx = (transactions: any, loading: any) => {
   
     return ( <>
 
-    <Table>
+    <Table className="border-0">
     
     <TableHeader>
-        <TableRow>
+        <TableRow className=" text-black">
         <TableHead className="w-[100px]">ID</TableHead>
         <TableHead>Type</TableHead>
         <TableHead>Date</TableHead>
@@ -39,7 +40,7 @@ const TableTx = (transactions: any, loading: any) => {
        
         
     {transactions.transactions?.length >0 && !transactions.loading ?  transactions.transactions?.map((tx: any) => (
-            <TableRow key={tx.id}>
+            <TableRow key={tx.id} className=" text-black border-b">
               <TableCell className="font-medium">{tx.id}</TableCell>
               <TableCell>{tx.type}</TableCell>
               <TableCell>{new Date(tx.createdAt).toUTCString()}</TableCell>
@@ -49,7 +50,9 @@ const TableTx = (transactions: any, loading: any) => {
               <TableCell className="text-right">{tx.fee}</TableCell>
               <TableCell>{tx.distributed}</TableCell>
               <TableCell>{tx.status}</TableCell>
-              <TableCell className="text-right"><a href={`https://polygonscan.com/address`+tx.trxHash}  target="_blank">Open in Explorer</a></TableCell>
+              <TableCell className="text-right">
+                <div className="bg-black text-white p-2 rounded-md"> <a href={`https://mumbai.polygonscan.com/address`+tx.trxHash}  target="_blank" >NoOpen in Explorer</a><Link1Icon /></div>
+               </TableCell>
             </TableRow>
           )) : <></>}
     </TableBody>
