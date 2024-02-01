@@ -25,7 +25,10 @@ const Navbar = () => {
 <div className="flex md:flex-row bg-black border-opacity-10 border-[1px] border-t-0 border-l-0 border-r-0 border-white solid items-center text-sm">
   <div className='md:flex justify-start px-4 md:px-20 py-4 border-opacity-10 border-r-[1px] border-white solid'>
     <div className='border-1 border-white solid'>
-      <Image src={LogoWhite} alt="Your Image Alt Text" width={200} height={100} />
+    <Link href='/'>
+           <Image src={LogoWhite} alt="Your Image Alt Text" width={200} height={100} />
+          </Link>
+     
     </div>
     
     {/* Your Drawer Component */}

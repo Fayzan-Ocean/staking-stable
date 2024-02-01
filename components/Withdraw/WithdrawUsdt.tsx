@@ -34,6 +34,7 @@ import { toast } from "sonner"
 import { useDebounce } from 'usehooks-ts'
 import { cn } from "@/lib/utils"
 import Withdraw from "../WithdrawTab"
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 
 
@@ -179,7 +180,7 @@ const WithdrawUsdt = () => {
 
     return ( <>
     
-    <Card className="relative overflow-hidden w-[33%]">
+    <Card className="relative bg-transparent text-black w-full">
       <CardHeader className="">
       <div className="absolute top-4 -left-3 rounded-full overflow-hidden">
       <svg
@@ -231,8 +232,8 @@ const WithdrawUsdt = () => {
       </CardHeader>
       <CardContent className="flex flex-col justify-between  w-full">
         <div className="flex justify-between">
-            <p className="flex justify-start text-xs pl-2 pb-2">Amount</p>
-            <p className="flex justify-start text-xs pl-2 pb-2"> 
+            <p className="flex justify-start text-sm pl-2 pb-2">Amount</p>
+            <p className="flex justify-start text-sm text-black font-medium pl-2 pb-2"> 
             <span className="flex gap-1 mr-2">
               
               {balanceUSDT?.data?.formatted ? balanceUSDT?.data?.formatted : "0"} {balanceUSDT?.data?.symbol ? balanceUSDT?.data?.symbol : "DDI"} </span> 
@@ -243,9 +244,9 @@ const WithdrawUsdt = () => {
         </div>
       
         
-      <div className="flex justify-center w-full max-w-full gap-1 items-center ">
+      <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="0" step="10" value={usdc} min={0}  onChange={(e)=>{
+          <Input type="number" placeholder="1" step="10" value={usdc} min={1}  onChange={(e)=>{
             if(Number(e.target.value) > (Number(balanceUSDT?.data?.formatted)*10)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(
@@ -259,21 +260,35 @@ const WithdrawUsdt = () => {
             }
             
             setUsdc(Number(e.target.value))
-            }} className=" w-[90%]"/>
-          <Button type="submit" className="flex hover:bg-slate-700 hover:text-white" 
-          onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDT?.data?.formatted)))} disabled={Number(balanceUSDT?.data?.formatted)<0} >Max</Button>
+            }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-auto"/>
+         
+         <div className="flex gap-1">
+            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
+              setUsdc(usdc+1)
+              }}> <ChevronUpIcon  width={18}/>
+          </div> 
+            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
+            onClick={()=>{
+              usdc-1 > 0 ? setUsdc(usdc-1) : null
+              }}
+              > <ChevronDownIcon width={18} />
+              </div></div>
+            
+      {address? <> <Button type="submit" className="flex bg-black hover:bg-slate-900 hover:text-white text-white rounded-full" 
+          onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDT?.data?.formatted)))} disabled={Number(balanceUSDT?.data?.formatted)<0} >Max</Button> </> : <></>}
+
         </div>
       </CardContent>
       <CardFooter>
       {isConnected  ? 
         <> 
           {isLoadingUsdt || isLoadingTransaction ? <>
-          <Button disabled className="flex w-full">
+          <Button disabled className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full">
           <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full" disabled={!writeUsdc || Number(balanceUSDT?.data?.formatted)<0} onClick={()=>{ writeUsdc?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdc || Number(balanceUSDT?.data?.formatted)<0} onClick={()=>{ writeUsdc?.()
 
         //setisDepositingUsdc(true)
         }} >
@@ -287,7 +302,7 @@ const WithdrawUsdt = () => {
         </>
         
         : <> 
-        <Button className="flex w-full hover:bg-slate-700 hover:text-white hover:transition-width  transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg" onClick={()=>{
+        <Button className="fflex w-full bg-black text-white hover:bg-slate-900 rounded-full hover:transition-width  transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg" onClick={()=>{
           open()}} >
           <LockClosedIcon className="mr-2 h-4 w-4"/> Connect Wallet
         </Button>

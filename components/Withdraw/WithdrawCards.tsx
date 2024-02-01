@@ -93,10 +93,10 @@ const WithdrawCards = () => {
 
           <div className="md:left-103 md:top-174 pt-10">
             <div className="left-27 top-0 text-right text-gray-500 text-xs font-semibold uppercase leading-4 tracking-wider break-words">
-              Total Deposited
+              Total Withdrawn
             </div>
             <div className="left-0 top-32 text-right text-white text-3xl font-light leading-10 break-words">
-            {userTotalData ? <>${userTotalData?.totalDeposit} </> : <> $0.00 </>}
+            {userTotalData && Number(userTotalData?.totalWithdraw) !=0 ? <>${Number(userTotalData?.totalWithdraw)*10} </> : <> $0.00 </>}
             </div>
           </div>
 

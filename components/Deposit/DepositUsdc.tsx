@@ -240,10 +240,10 @@ const DepositUsdc = () => {
 
     return ( <>
     
-    <Card className="relative overflow-hidden bg-transparent text-black w-full">
+    <Card className="relative  bg-transparent text-black w-full">
       <CardHeader className="">
       <div className="absolute top-4 -left-3 rounded-full overflow-hidden">
-     {/*  <svg
+       <svg
         style={{
           display: "inline-block",
           width: "1em",
@@ -280,7 +280,7 @@ const DepositUsdc = () => {
             <rect width={40} height={40} fill="currentColor" />
           </clipPath>
         </defs>
-      </svg> */}
+      </svg> 
     </div>
 
         <CardTitle>USDC</CardTitle>

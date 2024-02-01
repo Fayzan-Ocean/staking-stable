@@ -62,8 +62,6 @@ const WithdrawUsdc = () => {
         
         })
 
-
-
     const { config: configUsdc } = usePrepareContractWrite({
             address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
             abi: [{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}],
@@ -84,14 +82,11 @@ const WithdrawUsdc = () => {
             write:writeUsdc,
             
           } = useContractWrite(configUsdc)
-
  
 
     const { isLoading:isLoadingTransaction, isSuccess:isSuccessTransaction } = useWaitForTransaction({
             hash: dataUsdc?.hash ,
           })
-
-
 
 
     const addTransactionData = async ()=>{
@@ -138,7 +133,7 @@ const WithdrawUsdc = () => {
         console.log(allowanceData)
         }, [allowanceData]) */
 
-        useEffect(() => {
+    useEffect(() => {
             setHasMounted(true);
             }, [])
 
@@ -154,8 +149,6 @@ const WithdrawUsdc = () => {
           
           })
           }, [isErrorUsdc])
-
-
 
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdc ){
@@ -242,7 +235,7 @@ const WithdrawUsdc = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="0" step="10" value={usdc} min={0}  onChange={(e)=>{
+          <Input type="number" placeholder="10 USDT" step="10" value={usdc} min={10}  onChange={(e)=>{
             if(Number(e.target.value) > (Number(balanceUSDC?.data?.formatted)*10)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(
@@ -258,15 +251,17 @@ const WithdrawUsdc = () => {
             setUsdc(Number(e.target.value))
             }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-auto"/>
 
-<div className="flex gap-1">
+        <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
               setUsdc(usdc+1)
-              }}> <ChevronUpIcon  width={18}/></div> 
+              }}> <ChevronUpIcon  width={18}/>
+          </div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
               usdc-1 > 0 ? setUsdc(usdc-1) : null
               }}
-              > <ChevronDownIcon width={18} /></div></div>
+              > <ChevronDownIcon width={18} />
+              </div></div>
             
       {address? <> <Button type="submit" className="flex bg-black hover:bg-slate-900 hover:text-white text-white rounded-full" 
           onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDC?.data?.formatted)))} disabled={Number(balanceUSDC?.data?.formatted)<0} >Max</Button> </> : <></>}
