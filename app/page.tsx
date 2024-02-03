@@ -46,7 +46,7 @@ export default function Home() {
       <div className="">
         <h4 className="text-gray-800 text-2xl font-bold mb-4">Wat wil DDI?</h4>
         <p className="text-gray-700 leading-relaxed text-md">
-        "wie niet kan delen, kan ook niet vermenigvuldigen" DDI wil de op gedane kennis en ervaringen graag inzetten voor de leden van de DDI-community. Meer weten over DDI en de mogelijkheden? Zoek contact met ons.
+        `&quot;`wie niet kan delen, kan ook niet vermenigvuldigen`&quot;` DDI wil de op gedane kennis en ervaringen graag inzetten voor de leden van de DDI-community. Meer weten over DDI en de mogelijkheden? Zoek contact met ons.
         </p>
       </div></div>
 
@@ -88,7 +88,7 @@ export default function Home() {
           <AccordionItem value="item-3">
             <AccordionTrigger>What is een cryptocurrency?</AccordionTrigger>
             <AccordionContent>
-              Yes. It's animated by default, but you can disable it if you prefer.
+              Yes. It`&apos;`s animated by default, but you can disable it if you prefer.
             </AccordionContent>
           </AccordionItem>
         </Accordion>
