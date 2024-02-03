@@ -71,7 +71,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+   
     scrollbar-width: thin;
     scrollbar-color: var(--tw-bg-gray-300) var(--tw-bg-gray-800);
   }
@@ -87,13 +87,13 @@
   }
   
   body::-webkit-scrollbar-thumb {
-    background-color: var(--tw-bg-gray-800);
+  
     border-radius: 4px;
   }
   
   /* Track */
   body::-webkit-scrollbar-track {
-    background-color: var(--tw-bg-gray-300);
+  
   }
   
 }
