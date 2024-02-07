@@ -69,7 +69,7 @@ const WithdrawUsdt = () => {
             abi: [{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}],
             functionName: "withdraw",
             args: [
-                parseUnits(String(Number(usdc)/10) || "0",18), // convert to wei 
+                parseUnits(String(Number(usdc)/100) || "0",18), // convert to wei 
             ],
             chainId: chain?.id, 
             staleTime: 2000,
@@ -173,6 +173,20 @@ const WithdrawUsdt = () => {
             
             }, [isSuccessTransaction])
 
+            useEffect(() => {
+              if(address && usdc > Number(balanceUSDT?.data?.formatted)){
+                toast.warning("Amount you entered is more than your balance :(", {
+                  className: cn(
+                    'absolute '
+                  ), 
+                  action: {
+                    label: "Undo",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+              }
+                      }, [usdc])
+
           
           
  // Render
@@ -246,8 +260,8 @@ const WithdrawUsdt = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="1" step="10" value={usdc} min={1}  onChange={(e)=>{
-            if(Number(e.target.value) > (Number(balanceUSDT?.data?.formatted)*10)){
+          <Input type="number" placeholder="1" step="100" value={usdc} min={1}  onChange={(e)=>{
+            if(Number(e.target.value) > (Number(balanceUSDT?.data?.formatted)*100)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(
                   'absolute '
@@ -264,12 +278,12 @@ const WithdrawUsdt = () => {
          
          <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
-              setUsdc(usdc+1)
+              setUsdc(usdc+100)
               }}> <ChevronUpIcon  width={18}/>
           </div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
-              usdc-1 > 0 ? setUsdc(usdc-1) : null
+              usdc-100 > 0 ? setUsdc(usdc-100) : null
               }}
               > <ChevronDownIcon width={18} />
               </div></div>
@@ -321,5 +335,5 @@ const WithdrawUsdt = () => {
 export default WithdrawUsdt;
 
 function nearestMultipleOf100(numb:any) {
-    return Math.round(numb *10 ) ;
+    return Math.round(numb *100 ) ;
   }

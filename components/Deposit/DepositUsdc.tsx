@@ -315,11 +315,11 @@ const DepositUsdc = () => {
 
             <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
-              setUsdc(usdc+100)
+              setUsdc((Number(usdc)+100))
               }}> <ChevronUpIcon  width={18}/></div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
-              usdc-100 > 0 ? setUsdc(usdc-100) : null
+              usdc-100 > 0 ? setUsdc(Number(usdc)-100) : null
               }}
               > <ChevronDownIcon width={18} /></div></div>
             

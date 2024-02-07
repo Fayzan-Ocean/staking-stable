@@ -48,7 +48,7 @@ const WithdrawCards = () => {
             let dataa = { 
                 totalDeposit : formatUnits(userData[0],6),
                 totalWithdraw : formatUnits(userData[1],18),
-                accountBalance: Number(formatUnits(userData[0],6)) - (Number(formatUnits(userData[1],18)) *10)
+                accountBalance: Number(formatUnits(userData[0],6)) - (Number(formatUnits(userData[1],18)) *100)
             }
             setuserTotalData(dataa);
         }
@@ -96,7 +96,7 @@ const WithdrawCards = () => {
               Total Withdrawn
             </div>
             <div className="left-0 top-32 text-right text-white text-3xl font-light leading-10 break-words">
-            {userTotalData && Number(userTotalData?.totalWithdraw) !=0 ? <>${Number(userTotalData?.totalWithdraw)*10} </> : <> $0.00 </>}
+            {userTotalData && Number(userTotalData?.totalWithdraw) !=0 ? <>${Number(userTotalData?.totalWithdraw)*100} </> : <> $0.00 </>}
             </div>
           </div>
 

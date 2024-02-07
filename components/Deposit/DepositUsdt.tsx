@@ -213,6 +213,20 @@ const DepositUsdt = () => {
             
             }, [isSuccessTransaction])
 
+            useEffect(() => {
+              if(address && usdt > Number(balanceUSDT?.data?.formatted)){
+                toast.warning("Amount you entered is more than your balance :(", {
+                  className: cn(
+                    'absolute '
+                  ), 
+                  action: {
+                    label: "Undo",
+                    onClick: () => console.log("Undo"),
+                  },
+                })
+              }
+                      }, [usdt])
+
           
           
  // Render
