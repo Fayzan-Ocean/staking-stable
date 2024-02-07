@@ -35,7 +35,7 @@ const TransactionTable = () => {
     return objectArray ? objectArray.filter(obj => obj.type === targetType) : [];
   }
 
-    
+    //console.log(data)
     return ( <>
     
     <Tabs defaultValue="all" className=" w-full border rounded-2xl p-8 bg-[#EFEFEF]">

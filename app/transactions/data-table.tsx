@@ -25,8 +25,9 @@ import React from "react"
 import { Link1Icon } from "@radix-ui/react-icons"
 import MaticIcon from "../../node_modules/cryptocurrency-icons/32/color/matic.png"
 import EthIcon from "../../node_modules/cryptocurrency-icons/32/color/eth.png"
-
+import { useNetwork } from 'wagmi'
 import Image from "next/image"
+import { networkData } from "@/lib/chainData"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -40,6 +41,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
 
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const { chain, chains } = useNetwork()
 
   const table = useReactTable({
     data,
@@ -57,11 +59,14 @@ export function DataTable<TData, TValue>({
 
   const getCellData = (cell)=>{
 
+  
+
     if(cell.renderValue() == 'usdc' || cell.renderValue() == 'usdt'){
         return  cell.renderValue() == 'usdc'  ? <><Usdc /></> : <><Usdt /></>
     }
     if(cell.column.columnDef.accessorKey == 'trxHash'  ){
-        return <a href={`https://mumbai.polygonscan.com/tx/`+cell.renderValue()}  target="_blank" className="flex gap-1 align-middle items-center bg-black text-white py-1 px-2 rounded-md text-center items-center">Trx<Link1Icon /></a> 
+      console.log(cell.row.original.network)
+        return <a href={networkData.find((i)=>{return i.chainId == cell.row.original.network})?.explorer + `tx/`+ cell.renderValue()}  target="_blank" className="flex gap-1 align-middle items-center bg-black text-white py-1 pl-2 rounded-md text-center items-center">Trx Hash<Link1Icon /></a> 
     }
     if(cell.column.columnDef.accessorKey == 'network'){
         return cell.renderValue() ? <> <Image src={MaticIcon} alt="Matic Icon" width={24} height={24} /></> : <> <Image src={EthIcon} alt="Ethereum Icon" width={24} height={24} /></>
@@ -80,13 +85,13 @@ export function DataTable<TData, TValue>({
       return <> <span className=" text-sm font-semibold items-center align-middle justify-center">
         {cell.row.index}</span></>
     }
+    
    
 
     return flexRender(cell.column.columnDef.cell, cell.getContext())
 
 
   }
-
 
 
 
