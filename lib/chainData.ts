@@ -16,8 +16,8 @@ export const networkData = [
     {
         chainId: 80001,
         usdcAddress:'0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747',
-        usdtAddress:'0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747',
-        dappContract:'0x414e9F152442Bd612F8712EE9480B4fEa97eB02d',
+        usdtAddress:'0xe4c2ba0B2ad6d3076d58e1268ef5B4B49CD2E6F4',
+        dappContract:'0xf361ca23444fD658ECc724dABaedC9D822398e36',
         explorer:'http://mumbai.polygonscan.com/'
     }
 

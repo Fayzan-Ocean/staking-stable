@@ -167,7 +167,7 @@ const WithdrawUsdc = () => {
             }, [isSuccessTransaction])
 
             useEffect(() => {
-              if(address && usdc > Number(balanceUSDC?.data?.formatted)){
+              if(address && usdc > (Number(balanceUSDC?.data?.formatted)*100)){
                 toast.warning("Amount you entered is more than your balance :(", {
                   className: cn(
                     'absolute '
@@ -250,6 +250,8 @@ const WithdrawUsdc = () => {
       <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
           <Input type="number" placeholder="100 USDT" step="100" value={usdc} min={100}  onChange={(e)=>{
+
+            
             if(Number(e.target.value) > (Number(balanceUSDC?.data?.formatted)*100)){
               toast.warning("Amount you entered is more than your balance :(", {
                 className: cn(
@@ -263,7 +265,7 @@ const WithdrawUsdc = () => {
             }
             
             setUsdc(Number(e.target.value))
-            }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-auto"/>
+            }} className=" w-[90%]  border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-none "/>
 
         <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{

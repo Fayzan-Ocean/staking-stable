@@ -174,7 +174,7 @@ const WithdrawUsdt = () => {
             }, [isSuccessTransaction])
 
             useEffect(() => {
-              if(address && usdc > Number(balanceUSDT?.data?.formatted)){
+              if(address && usdc > (Number(balanceUSDT?.data?.formatted)*100)){
                 toast.warning("Amount you entered is more than your balance :(", {
                   className: cn(
                     'absolute '
@@ -274,7 +274,7 @@ const WithdrawUsdt = () => {
             }
             
             setUsdc(Number(e.target.value))
-            }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-auto"/>
+            }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-none"/>
          
          <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{

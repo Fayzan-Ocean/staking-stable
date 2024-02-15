@@ -235,10 +235,25 @@ const WithdrawCards = () => {
         
         </div>
             
-<div className=' flex flex-col p-4 bg-white text-black rounded-md justify-center text-center font-semibold'>
-                <div>{userTotalData ? <>Account Balance: $ {userTotalData?.accountBalance} </> : <> $ 0.00 </>}</div>
-                <div>{userTotalData ? <>Total Deposit: $ {userTotalData?.totalDeposit} </> : <> $ 0.00 </>}</div>
-                <div>{userTotalData ? <>Total Withdraw: $ {userTotalData?.totalWithdraw} </> : <> $ 0.00 </>}</div>
+<div className=' flex flex-col p-4 bg-white text-black rounded-md justify-center text-center font-semibold gap-2'>
+                <div>
+                  
+                  {userTotalData ? <>Account Balance: 
+                <span className='px-2 py-1 ml-2 rounded-full text-white shadow-2xl bg-blue-500'>$ {userTotalData?.accountBalance}</span> </> : <> $ 0.00 </>}
+                
+                </div>
+                <div>
+                  
+                  {userTotalData ? <>Total Deposit: 
+                  <span className='px-2 py-1 ml-2 rounded-full text-white shadow-2xl bg-green-500'>$ {userTotalData?.totalDeposit}</span> </> : <> $ 0.00 </>}
+                  
+                  </div>
+                <div>
+                  
+                  {userTotalData ? <>Total Withdraw:  
+                    <span className='px-2 py-1 ml-2 rounded-full text-white shadow-2xl bg-red-500'>{userTotalData?.totalWithdraw} DDI = $ {Number(userTotalData?.totalWithdraw)*Number(minUsd)}  </span></> : <> $ 0.00 </>}
+                  
+                  </div>
         </div>
         </div>
 

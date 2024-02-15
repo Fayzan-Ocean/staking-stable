@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
         return  cell.renderValue() == 'usdc'  ? <><Usdc /></> : <><Usdt /></>
     }
     if(cell.column.columnDef.accessorKey == 'trxHash'  ){
-      console.log(cell.row.original.network)
+      
         return <a href={networkData.find((i)=>{return i.chainId == cell.row.original.network})?.explorer + `tx/`+ cell.renderValue()}  target="_blank" className="flex gap-1 align-middle items-center bg-black text-white py-1 pl-2 rounded-md text-center items-center">Trx Hash<Link1Icon /></a> 
     }
     if(cell.column.columnDef.accessorKey == 'network'){
