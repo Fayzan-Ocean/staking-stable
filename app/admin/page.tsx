@@ -15,8 +15,8 @@ import {
   import { useEffect, useState } from "react"
   import { formatUnits, parseUnits } from "viem"
   import { useContractRead, useNetwork, useAccount, usePrepareContractWrite, useContractWrite } from "wagmi"
-import { Link1Icon, ReloadIcon } from '@radix-ui/react-icons'
-import { DownloadIcon, Link2, Loader2Icon } from 'lucide-react'
+import { Link1Icon, PauseIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { DownloadIcon, Link2, Loader2Icon, LoaderIcon, Pause, PauseCircleIcon, Play } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
 import useAllTransactions from "@/hooks/useAllTransactions"
@@ -35,6 +35,12 @@ import { DataTable } from '../transactions/data-table'
 import * as excel from "xlsx";
 import { toast } from "sonner"
 import { Input } from '@/components/ui/input'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 const WithdrawCards = () => {
@@ -55,7 +61,7 @@ const WithdrawCards = () => {
     const [excelData, setexcelData] = useState([]);
     const [excelDataResponse, setexcelDataResponse] = useState([]);
     const [isUpdating, setisUpdating] = useState(false);
-
+    const [treasuryForm, settreasuryForm] = useState('');
  
 
     const { data:minUSDData, isError:minUsdDataError, isLoading:minUsdDataLoading } = useContractRead({
@@ -148,6 +154,39 @@ const WithdrawCards = () => {
       write:writeUnPause,
       
     } = useContractWrite(configUnPause)
+
+    const { config: configTreasury } = usePrepareContractWrite({
+      address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
+      abi: [{"inputs":[{"internalType":"address","name":"_treasuryWallet","type":"address"}],"name":"setTreasuryWallet","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+      functionName: "setTreasuryWallet",
+      args: [
+        treasuryForm, // convert to wei 
+    ],
+      chainId: chain?.id, 
+      staleTime: 2000,
+
+      onSuccess: ()=>{
+        toast.success("Treasury Wallet Updated!  :)", {
+                  
+          action: {
+            label: "ok",
+            onClick: () => console.log("ok"),
+            
+          },
+        
+        })
+      }
+     
+  })
+
+  const {
+      data:dataTreasury,
+      isError:isErrorTreasury,
+      isLoading:isLoadingTreasury,
+      isSuccess:isSuccessTreasury,
+      write:writeTreasury,
+      
+    } = useContractWrite(configTreasury)
 
 
     useEffect(()=>{
@@ -337,6 +376,7 @@ const WithdrawCards = () => {
     </div>
    
   </div>
+
   <div className='flex justify-center bg-black w-full'><h2 className='text-2xl'>Admin Tools</h2></div>
    
   <div className='flex justify-center py-10 bg-black w-full h-full'>
@@ -384,19 +424,49 @@ const WithdrawCards = () => {
 
     <div className='flex justify-center bg-black w-full'><h2 className='text-2xl font-bold'>Contract Functions</h2></div>
 
-    <div className='flex bg-black justify-center align-middle text-center items-center py-10'>
+    <div className='flex flex-col gap-8 bg-black justify-center align-middle text-center items-center py-10'>
       
   
 
-      <div>
-        <Button className=' bg-blue-600 rounded-full hover:bg-blue-950' variant={'outline'} 
-        onClick={()=>{
+      <div className='flex flex-col bg-black justify-center align-middle text-center items-center gap-2'>
+        <label> Press This button to Pause/Unpause the Contract </label>
 
-          String(pauseData) == 'true' ?  writeUnPause?.() :  writePause?.()
-         
+    {isLoadingPause || isLoadingUnPause ? <>
+      <Button className=' bg-blue-600 rounded-full hover:bg-blue-950 ml-2' variant={'outline'} 
+       disabled
+        >
+
+          {isLoadingPause ? <><LoaderIcon className=' animate-spin pr-2' />Pausing</> : <><LoaderIcon className=' animate-spin pr-2' /> Unpausing</> } Contract</Button>
+     </> : <><Button className=' bg-blue-600 rounded-full hover:bg-blue-950 ml-2' variant={'outline'} 
+        onClick={()=>{
+          String(pauseData) == 'true' ?  writeUnPause?.() :  writePause?.() 
         }}
-        >{String(pauseData) == 'true' ? 'Unpause' : 'Pause' } Contract</Button>
+        >
+
+          {String(pauseData) == 'true' ? <><Play className='pr-1' />Unpause</> : <><Pause className='pr-1' /> Pause</> } Contract</Button></>}
+
+        
+
+
       </div>
+
+      <div className='flex flex-col bg-black justify-center align-middle text-center items-center gap-2 w-1/3'>
+        <label> Change Treasury Wallet </label>
+
+        <div className='flex  w-full gap-1'>
+          <Input type="text" placeholder="0xB23Hidi7k3b2..." onChange={(e)=>settreasuryForm(e.target.value)} className='px-2 py-1' /> 
+
+          {isLoadingTreasury && !isSuccessTreasury ? <>    <Button className=' bg-blue-600 rounded-full hover:bg-blue-950 ' variant={'outline'}
+        disabled><LoaderIcon className=' animate-spin pr-2' />Updating</Button></> : <>    <Button className=' bg-blue-600 rounded-full hover:bg-blue-950 ' variant={'outline'}
+          onClick={()=>writeTreasury?.()}
+          >Update</Button></>}
+      
+        </div>
+       
+
+    
+      </div>
+      
     </div>
 
 
@@ -409,9 +479,26 @@ onChange={(e) => {
   readExcel(file);
 
 }}
-/><Button className=" flex gap-2 rounded-full cursor-pointer bg-teal-500" variant={'outline'} onClick={handleUpdateStatus}>
+/>
+
+<TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+        <Button className=" flex gap-2 rounded-full cursor-pointer bg-teal-500" variant={'outline'} onClick={handleUpdateStatus}>
   {isUpdating ? <> <Loader2Icon className="animate animate-spin" /> Updating </> : <>Update Status</>}
-  </Button></div>
+  </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className='font-bold'>Upload the updated excel sheet and press this button.</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+
+{/* <Button className=" flex gap-2 rounded-full cursor-pointer bg-teal-500" variant={'outline'} onClick={handleUpdateStatus}>
+  {isUpdating ? <> <Loader2Icon className="animate animate-spin" /> Updating </> : <>Update Status</>}
+  </Button> */}
+  
+  </div>
 
 
     <Button className=" flex gap-2 rounded-full " variant={'outline'} onClick={(e)=>{ e.preventDefault() 
