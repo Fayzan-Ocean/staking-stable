@@ -86,10 +86,10 @@ const WithdrawCards = () => {
       <Image className="absolute overflow-hidden p-0 -left-10 -top-10" src={CardBg} width={150} height={150} alt='l'/>
         <div className="relative w-full h-full border-radius-16 overflow-hidden border-solid border-1 border-gray-700">
 
-          <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words">+30%</div>
-          <div className="w-56 h-23 mt-4 md:mt-0 md:left-152 md:top-30 text-right text-white text-base font-normal leading-26 break-words">
-            from last week
-          </div>
+        <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words"></div>
+            <div className="w-56 h-23 mt-4 md:mt-0 md:left-152 md:top-30 text-right text-white text-base font-normal leading-26 break-words">
+
+            </div>
 
           <div className="md:left-103 md:top-174 pt-10">
             <div className="left-27 top-0 text-right text-gray-500 text-xs font-semibold uppercase leading-4 tracking-wider break-words">
@@ -108,9 +108,9 @@ const WithdrawCards = () => {
       <Image className="absolute overflow-hidden p-0 -right-10 -top-10" src={CardBg2} width={150} height={150} alt='l'/>
       <div className="relative w-full h-full border-radius-16 overflow-hidden border-solid border-1 border-gray-700">
 
-            <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words">+30%</div>
+      <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words"></div>
             <div className="w-56 h-23 mt-4 md:mt-0 md:left-152 md:top-30 text-right text-white text-base font-normal leading-26 break-words">
-            from last week
+
             </div>
 
             <div className="md:left-103 md:top-174 pt-10">
@@ -130,9 +130,9 @@ const WithdrawCards = () => {
       <Image className="absolute overflow-hidden p-0 -left-10 -top-10" src={CardBg} width={120} height={120} alt='l'/>
       <div className="relative w-full h-full border-radius-16 overflow-hidden border-solid border-1 border-gray-700">
 
-            <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words">+30%</div>
+            <div className="absolute px-1 h-22.73 text-center bg-teal-800 rounded text-teal-400 text-base font-bold leading-84.50 break-words"></div>
             <div className="w-56 h-23 mt-4 md:mt-0 md:left-152 md:top-30 text-right text-white text-base font-normal leading-26 break-words">
-            from last week
+
             </div>
 
             <div className="md:left-103 md:top-174 pt-10">
