@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
-  import { ChevronUpIcon,ChevronDownIcon } from "lucide-react"
+  import { ChevronUpIcon,ChevronDownIcon, RefreshCwIcon } from "lucide-react"
   import {  ReloadIcon } from "@radix-ui/react-icons"
   import { RocketIcon,LockClosedIcon, CheckIcon, CheckCircledIcon } from "@radix-ui/react-icons"
   import { Input } from "@/components/ui/input"
@@ -41,9 +41,9 @@ import { cn } from "@/lib/utils"
 const DepositUsdt = () => {
 
   const [hasMounted, setHasMounted] = useState(false);
-  const [usdt, setUsdt] = useState(0.0);
+  const [usdt, setUsdt] = useState(100.0);
   const [isDepositingUsdtError, setisDepositingUsdtError] = useState(false);
-
+  const [adder, setAdder] = useState(100.0);
 
   const { address, isConnecting, isDisconnected, isConnected } = useAccount()
   const { open, close } = useWeb3Modal()
@@ -189,7 +189,7 @@ const DepositUsdt = () => {
 
     useEffect(() => {
           if(isErrorUsdt && !isLoadingUsdt )
-          toast.error("Deposit Unsuccessfull :(", {      
+          toast.error("Deposit Unsuccessfull!", {      
             action: {
               label: "ok",
               onClick: () => console.log("ok"),
@@ -200,7 +200,7 @@ const DepositUsdt = () => {
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdt ){
                 addTransactionData()
-                toast.success("Deposit Successfull :>", {
+                toast.success("Deposit Successfull!", {
                  
                   action: {
                     label: "ok",
@@ -215,7 +215,7 @@ const DepositUsdt = () => {
 
             useEffect(() => {
               if(address && usdt > Number(balanceUSDT?.data?.formatted)){
-                toast.warning("Amount you entered is more than your balance :(", {
+                toast.warning("Amount you entered is more than your balance!", {
                   className: cn(
                     'absolute '
                   ), 
@@ -295,9 +295,9 @@ const DepositUsdt = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="0" step="10" value={usdt} min={0}   onChange={(e)=>{
+          <Input type="number" placeholder="100" step="100" value={usdt} min={100}   onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDT?.data?.formatted)){
-              toast.warning("Amount you entered is more than your balance :(", {
+              toast.warning("Amount you entered is more than your balance.", {
                 className: cn(
                   'absolute '
                 ), 
@@ -313,11 +313,11 @@ const DepositUsdt = () => {
 
             <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer " onClick={()=>{
-              setUsdt(usdt+100)
+              setUsdt(usdt+adder)
               }}> <ChevronUpIcon  width={18}/></div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
-              usdt-100 > 0 ? setUsdt(usdt-100) : null
+              usdt-adder > 100 ? setUsdt(usdt-adder) : null
               }}
               > <ChevronDownIcon width={18} /></div></div>
             
@@ -325,7 +325,20 @@ const DepositUsdt = () => {
           onClick={()=>setUsdt(nearestMultipleOf100(Number(balanceUSDT?.data?.formatted)))} disabled={Number(balanceUSDT?.data?.formatted)<0} >Max</Button> </> : <></>}
          
         </div>
-
+        <div className="flex gap-4 py-2 justify-center flex-wrap">
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(100)} >x100</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(200)}>x200</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(500)}>x500</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(1000)}>x1000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(5000)}>x5000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setUsdt(100)}><RefreshCwIcon /></Button>
+            </div>
  
       </CardContent>
       <CardFooter>

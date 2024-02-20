@@ -33,7 +33,7 @@ import { networkData } from "@/lib/chainData"
 import { toast } from "sonner"
 import { useDebounce } from 'usehooks-ts'
 import { cn } from "@/lib/utils"
-import { ChevronUpIcon,ChevronDownIcon } from "lucide-react"
+import { ChevronUpIcon,ChevronDownIcon, RefreshCwIcon } from "lucide-react"
 
 
 
@@ -41,8 +41,9 @@ import { ChevronUpIcon,ChevronDownIcon } from "lucide-react"
 const DepositUsdc = () => {
 
   const [hasMounted, setHasMounted] = useState(false);
-  const [usdc, setUsdc] = useState(0.0);
-  const [usdt, setUsdt] = useState(0.0);
+  const [usdc, setUsdc] = useState(100.0);
+  const [usdt, setUsdt] = useState(100.0);
+  const [adder, setAdder] = useState(100.0);
   const [isDepositingUsdcError, setisDepositingUsdcError] = useState(false);
   const [isDepositingUsdt, setisDepositingUsdtError] = useState(false);
 
@@ -190,7 +191,7 @@ const DepositUsdc = () => {
 
     useEffect(() => {
           if(isErrorUsdc && !isLoadingUsdc )
-          toast.error("Deposit Unsuccessfull :(", {
+          toast.error("Deposit Unsuccessfull!", {
               
             action: {
               label: "ok",
@@ -206,7 +207,7 @@ const DepositUsdc = () => {
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdc ){
                 addTransactionData()
-                toast.success("Deposit Successfull :>", {
+                toast.success("Deposit Successfull!", {
                  
                   action: {
                     label: "ok",
@@ -221,7 +222,7 @@ const DepositUsdc = () => {
 
     useEffect(() => {
       if(address && usdc > Number(balanceUSDC?.data?.formatted)){
-        toast.warning("Amount you entered is more than your balance :(", {
+        toast.warning("Amount you entered is more than your balance.", {
           className: cn(
             'absolute '
           ), 
@@ -297,9 +298,9 @@ const DepositUsdc = () => {
         
       <div className="flex justify-center w-full max-w-full gap-1 items-center border-[1.5px] py-1 text-black border-x-0">
         
-          <Input type="number" placeholder="0" step="10" value={usdc} min={0}   onChange={(e)=>{
+          <Input type="number" placeholder="100" step="100" value={usdc} min={100}   onChange={(e)=>{
             if(Number(e.target.value) > Number(balanceUSDC?.data?.formatted)){
-              toast.warning("Amount you entered is more than your balance :(", {
+              toast.warning("Amount you entered is more than your balance.", {
                 className: cn(
                   'absolute '
                 ), 
@@ -313,24 +314,43 @@ const DepositUsdc = () => {
             setUsdc(Number(e.target.value))
             }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-none"/>
 
+         
+
             <div className="flex gap-1">
-            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
-              setUsdc((Number(usdc)+100))
-              }}> <ChevronUpIcon  width={18}/></div> 
-            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
-            onClick={()=>{
-              usdc-100 > 0 ? setUsdc(Number(usdc)-100) : null
-              }}
-              > <ChevronDownIcon width={18} /></div></div>
+              <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
+                setUsdc((Number(usdc)+adder))
+                }}> <ChevronUpIcon  width={18}/></div> 
+              <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
+              onClick={()=>{
+                usdc-adder > 100 ? setUsdc(Number(usdc)-adder) : null
+                }}
+                > <ChevronDownIcon width={18} /></div>     
+            </div>
             
       {address? <> <Button type="submit" className="flex bg-black hover:bg-slate-900 hover:text-white text-white rounded-full" 
           onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDC?.data?.formatted)))} disabled={Number(balanceUSDC?.data?.formatted)<0} >Max</Button> </> : <></>}
          
         </div>
 
- 
+            <div className="flex gap-4 py-2 justify-center flex-wrap">
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(100)} >x100</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(200)}>x200</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(500)}>x500</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(1000)}>x1000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(5000)}>x5000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setUsdc(100)}><RefreshCwIcon /></Button>
+            </div>
+
       </CardContent>
       <CardFooter>
+
+      
       {isConnected  ? 
         <> 
         {allowanceData && Number(allowanceData) >= Number(parseUnits(String(usdc),6)) ? <>
@@ -398,11 +418,11 @@ const DepositUsdc = () => {
         </Button>
         </> : 
         <>
-        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdcApprove?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<=100} onClick={()=>{ writeUsdcApprove?.()
 
         //setisDepositingUsdc(true)
         }} >
-          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of USDC" : "Approve USDC"} 
+          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<=100 ? "You're out of USDC" : "Approve USDC"} 
           </Button>
           </>}
     {/*     <Dialog>

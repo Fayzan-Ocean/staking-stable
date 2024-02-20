@@ -313,7 +313,7 @@ const WithdrawCards = () => {
 
 
     {/* Cards on the Right Side */}
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 pt-10">
+    <div className="flex flex-col md:flex-row flex-wrap space-y-4 md:space-y-0 md:space-x-4 pt-10">
 
       {/* Card 1 */}
       <div className="relative bg-black px-8 py-4 border-[1px] border-gray-600 rounded-lg shadow-md flex-1 overflow-hidden">
@@ -377,7 +377,7 @@ const WithdrawCards = () => {
    
   </div>
 
-  <div className='flex justify-center bg-black w-full'><h2 className='text-2xl'>Admin Tools</h2></div>
+  <div className='flex justify-center bg-black w-full'><h2 className='text-2xl font-bold'>Admin Tools</h2></div>
    
   <div className='flex justify-center py-10 bg-black w-full h-full'>
     

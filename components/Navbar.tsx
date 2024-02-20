@@ -24,7 +24,7 @@ const Navbar = () => {
 
     return ( <>
  
-{pathname == '/' ? 
+{pathname == '/shit' ? 
 
 <>        
 <div className=" absolute w-full flex md:flex-row bg-transparent border-opacity-10 border-0 border-white solid items-center text-sm ">

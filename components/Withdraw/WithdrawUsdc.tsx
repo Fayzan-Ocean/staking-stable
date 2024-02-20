@@ -34,7 +34,7 @@ import { toast } from "sonner"
 import { useDebounce } from 'usehooks-ts'
 import { cn } from "@/lib/utils"
 import Withdraw from "../WithdrawTab"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { ChevronDownIcon, ChevronUpIcon, RefreshCwIcon } from "lucide-react"
 
 
 
@@ -42,10 +42,12 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 const WithdrawUsdc = () => {
 
   const [hasMounted, setHasMounted] = useState(false);
-  const [usdc, setUsdc] = useState(0.0);
-  const [usdt, setUsdt] = useState(0.0);
+  const [usdc, setUsdc] = useState(100.0);
+  const [usdt, setUsdt] = useState(100.0);
   const [isDepositingUsdcError, setisDepositingUsdcError] = useState(false);
   const [isDepositingUsdt, setisDepositingUsdtError] = useState(false);
+  const [adder, setAdder] = useState(100.0);
+
 
   const { address, isConnecting, isDisconnected, isConnected } = useAccount()
   const { open, close } = useWeb3Modal()
@@ -139,7 +141,7 @@ const WithdrawUsdc = () => {
 
     useEffect(() => {
           if(isErrorUsdc && !isLoadingUsdc )
-          toast.error("Withdraw Unsuccessfull :(", {
+          toast.error("Withdraw Unsuccessfull!", {
               
             action: {
               label: "ok",
@@ -153,7 +155,7 @@ const WithdrawUsdc = () => {
     useEffect(() => {
             if(isSuccessTransaction && !isLoadingUsdc ){
                 addTransactionData()
-                toast.success("Withdraw Successfull :>", {
+                toast.success("Withdraw Successfull!", {
                  
                   action: {
                     label: "ok",
@@ -168,7 +170,7 @@ const WithdrawUsdc = () => {
 
             useEffect(() => {
               if(address && usdc > (Number(balanceUSDC?.data?.formatted)*100)){
-                toast.warning("Amount you entered is more than your balance :(", {
+                toast.warning("Amount you entered is more than your balance.", {
                   className: cn(
                     'absolute '
                   ), 
@@ -253,7 +255,7 @@ const WithdrawUsdc = () => {
 
             
             if(Number(e.target.value) > (Number(balanceUSDC?.data?.formatted)*100)){
-              toast.warning("Amount you entered is more than your balance :(", {
+              toast.warning("Amount you entered is more than your balance.", {
                 className: cn(
                   'absolute '
                 ), 
@@ -269,12 +271,12 @@ const WithdrawUsdc = () => {
 
         <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
-              setUsdc(usdc+100)
+              setUsdc(usdc+adder)
               }}> <ChevronUpIcon  width={18}/>
           </div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
-              usdc-100 > 0 ? setUsdc(usdc-100) : null
+              usdc-adder > 100 ? setUsdc(usdc-adder) : null
               }}
               > <ChevronDownIcon width={18} />
               </div></div>
@@ -283,6 +285,26 @@ const WithdrawUsdc = () => {
           onClick={()=>setUsdc(nearestMultipleOf100(Number(balanceUSDC?.data?.formatted)))} disabled={Number(balanceUSDC?.data?.formatted)<0} >Max</Button> </> : <></>}
     
         </div>
+
+
+        <div className="flex gap-4 py-2 justify-center flex-wrap">
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(100)} >x100</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(200)}>x200</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(500)}>x500</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(1000)}>x1000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setAdder(5000)}>x5000</Button>
+              <Button variant={'outline'} className="rounded-full bg-white"
+              onClick={()=>setUsdc(100)}><RefreshCwIcon /></Button>
+            </div>
+
+
+
+
       </CardContent>
       <CardFooter>
       {isConnected  ? 
@@ -293,11 +315,11 @@ const WithdrawUsdc = () => {
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<0} onClick={()=>{ writeUsdc?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdc || Number(balanceUSDC?.data?.formatted)<=0} onClick={()=>{ writeUsdc?.()
 
         //setisDepositingUsdc(true)
         }} >
-          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<0 ? ":( You're out of DDI" : "Withdraw"} 
+          <RocketIcon className="mr-2 h-4 w-4" /> {Number(balanceUSDC?.data?.formatted)<=0 ? "You're out of DDI" : "Withdraw"} 
           </Button>
           </>}   
 
