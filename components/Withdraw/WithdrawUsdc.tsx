@@ -94,10 +94,10 @@ const WithdrawUsdc = () => {
               const depositData =  {
                 address: address,
                   type: 'withdraw',
-                  amount: String(usdc ),
+                  amount: String(usdc),
                   token: String('usdc'),
                   network: chain?.id || 0,
-                  status: isSuccessTransaction ? 'success' : 'pending',
+                  status:  'pending',
                   trxHash: String(dataUsdc?.hash)
                 }
                 try {

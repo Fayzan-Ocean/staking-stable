@@ -14,18 +14,27 @@ import {
   import { networkData } from "@/lib/chainData"
   import { useEffect, useState } from "react"
   import { formatUnits, parseUnits } from "viem"
-  import { useContractRead, useNetwork, useAccount } from "wagmi"
+  import { useContractRead, useNetwork, useAccount, usePrepareContractWrite, useContractWrite } from "wagmi"
 import { Link1Icon, ReloadIcon } from '@radix-ui/react-icons'
-import { DownloadIcon, Link2 } from 'lucide-react'
+import { DownloadIcon, Link2, Loader2Icon } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
 import useAllTransactions from "@/hooks/useAllTransactions"
 import xlsx from "json-as-xlsx"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { columns } from '../transactions/columns'
 import { DataTable } from '../transactions/data-table'
-
+import * as excel from "xlsx";
+import { toast } from "sonner"
+import { Input } from '@/components/ui/input'
 
 
 const WithdrawCards = () => {
@@ -43,6 +52,9 @@ const WithdrawCards = () => {
         totalWithdraw:"0",
         accountBalance: 0
     });
+    const [excelData, setexcelData] = useState([]);
+    const [excelDataResponse, setexcelDataResponse] = useState([]);
+    const [isUpdating, setisUpdating] = useState(false);
 
  
 
@@ -80,7 +92,7 @@ const WithdrawCards = () => {
         address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
         abi: [{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}],
        functionName:"paused",
-
+      watch:true,
         chainId: chain?.id, 
       
        
@@ -99,6 +111,43 @@ const WithdrawCards = () => {
       
        
     })
+
+
+  const { config: configPause } = usePrepareContractWrite({
+      address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
+      abi: [{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+      functionName: "pause",
+      chainId: chain?.id, 
+      staleTime: 2000,
+     
+  })
+
+  const {
+      data:dataPause,
+      isError:isErrorPause,
+      isLoading:isLoadingPause,
+      isSuccess:isSuccessPause,
+      write:writePause,
+      
+    } = useContractWrite(configPause)
+
+  const { config: configUnPause } = usePrepareContractWrite({
+      address: networkData.find((i)=>{return i.chainId == chain?.id})?.dappContract as `0x${string}`,
+      abi: [{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+      functionName: "unpause",
+      chainId: chain?.id, 
+      staleTime: 2000,
+     
+  })
+
+  const {
+      data:dataUnPause,
+      isError:isErrorUnPause,
+      isLoading:isLoadingUnPause,
+      isSuccess:isSuccessUnPause,
+      write:writeUnPause,
+      
+    } = useContractWrite(configUnPause)
 
 
     useEffect(()=>{
@@ -143,7 +192,76 @@ const WithdrawCards = () => {
     },[userData])
 
 
+    const readExcel = (file: any) => {
 
+      try {
+         const promise = new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.readAsArrayBuffer(file);
+          fileReader.onload = (e) => {
+              const bufferArray = e.target.result;
+              const wb = excel.read(bufferArray, {
+                  type: "buffer"
+              });
+              const wsname = wb.SheetNames[0];
+              const ws = wb.Sheets[wsname];
+              const data = excel.utils.sheet_to_json(ws);
+              //console.log(data);
+              resolve(data);
+          };
+          fileReader.onerror = (error) => {
+              reject(error);
+          };
+      });
+      promise.then((d) => {
+    
+          setexcelData(d);
+      });
+      } catch (error) {
+        console.log(error)
+      }
+    
+     
+    };
+    
+    const handleUpdateStatus = async (e) => {
+      e.preventDefault();
+      setisUpdating(true)
+      while(isUpdating){
+          toast.info("Updating Status. Please wait! :)", {
+                  
+        action: {
+          label: "ok",
+          onClick: () => console.log("ok"),
+          
+        },
+      
+      })
+      }
+    
+      try {
+        const res = await fetch('/api/transactions/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: excelData }),
+        });
+        const data = await res.json();
+        setexcelDataResponse(data.message);
+        await refreshTransactions()
+        setisUpdating(false)
+      } catch (error) {
+        setisUpdating(false)
+        console.error('Error:', error);
+      }
+    };
+
+
+
+
+    
+    
 
   return (
     <>  
@@ -154,8 +272,9 @@ const WithdrawCards = () => {
 {String(pauseData) == 'true' ? <div className='absolute top-28 text-white' >Contract is <Badge  variant="destructive" className=' uppercase'>Paused</Badge></div> : <div className='absolute top-28'>Contract is <Badge className=' bg-green-700 uppercase' >Live</Badge></div> }
 
 
+
     {/* Cards on the Right Side */}
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 pt-10">
 
       {/* Card 1 */}
       <div className="relative bg-black px-8 py-4 border-[1px] border-gray-600 rounded-lg shadow-md flex-1 overflow-hidden">
@@ -221,9 +340,8 @@ const WithdrawCards = () => {
   <div className='flex justify-center bg-black w-full'><h2 className='text-2xl'>Admin Tools</h2></div>
    
   <div className='flex justify-center py-10 bg-black w-full h-full'>
-    <div></div>
-       
-        <div className='flex flex-col gap-2 text-left w-1/3'>
+    
+        <div className='flex flex-col gap-2 text-left w-2/3 md:w-1/3'>
             <h3>Get User Stats</h3>
 
         <div className='flex gap-2 text-center align-middle items-center'>
@@ -264,9 +382,38 @@ const WithdrawCards = () => {
 
     </div>
 
+    <div className='flex justify-center bg-black w-full'><h2 className='text-2xl font-bold'>Contract Functions</h2></div>
 
-    <div className="container mx-auto w-full bg-black">
-  <div className="flex justify-end py-4 gap-2">
+    <div className='flex bg-black justify-center align-middle text-center items-center py-10'>
+      
+  
+
+      <div>
+        <Button className=' bg-blue-600 rounded-full hover:bg-blue-950' variant={'outline'} 
+        onClick={()=>{
+
+          String(pauseData) == 'true' ?  writeUnPause?.() :  writePause?.()
+         
+        }}
+        >{String(pauseData) == 'true' ? 'Unpause' : 'Pause' } Contract</Button>
+      </div>
+    </div>
+
+
+    <div className=" lg:px-72 px-10 mx-auto py-10 w-full bg-black">
+  <div className="flex flex-col md:flex-row justify-end py-4 gap-2">
+
+  <div className="flex gap-1"><Input id="statusSheet" type="file" className=" rounded-full bg-black" 
+onChange={(e) => {
+  const file = e.target.files[0] ;
+  readExcel(file);
+
+}}
+/><Button className=" flex gap-2 rounded-full cursor-pointer bg-teal-500" variant={'outline'} onClick={handleUpdateStatus}>
+  {isUpdating ? <> <Loader2Icon className="animate animate-spin" /> Updating </> : <>Update Status</>}
+  </Button></div>
+
+
     <Button className=" flex gap-2 rounded-full " variant={'outline'} onClick={(e)=>{ e.preventDefault() 
       refreshTransactions()}}>
       <ReloadIcon className="hover:animate-spin" /> Refresh
@@ -277,11 +424,11 @@ const WithdrawCards = () => {
       <FileIcon  /> Download Excel Sheet
     </Button> */}
 
-    <DropdownMenu>
-    <DropdownMenuTrigger className="items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-black shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex gap-2 rounded-full"> <DownloadIcon />Download Excel Sheet</DropdownMenuTrigger>
+<DropdownMenu>
+    <DropdownMenuTrigger className="items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex gap-2 rounded-full"> <DownloadIcon />Download Excel Sheet</DropdownMenuTrigger>
     <DropdownMenuContent className="w-full">  
       <DropdownMenuItem onClick={(e)=>{ e.preventDefault() 
-      downloadFile('all')}} className="cursor-pointer">All</DropdownMenuItem>
+      downloadFile('all')}} className="cursor-pointer  ">All</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={(e)=>{ e.preventDefault() 
       downloadFile('deposit')}} className="cursor-pointer">Deposits</DropdownMenuItem>

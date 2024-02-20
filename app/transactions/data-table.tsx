@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
     }
     if(cell.column.columnDef.accessorKey == 'amount'){
       return <> <span className=" text-lg font-semibold items-center align-middle justify-center">
-        {cell.renderValue()}</span></>
+        ${cell.renderValue()}</span></>
     }
     if(cell.column.columnDef.accessorKey == 'id'){
       return <> <span className=" text-sm font-semibold items-center align-middle justify-center">

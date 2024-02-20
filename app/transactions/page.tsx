@@ -17,7 +17,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DownloadIcon } from "lucide-react"
+import { DownloadIcon, Loader2Icon, LoaderIcon, RocketIcon } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import * as excel from "xlsx";
+import { useState } from "react"
+import { toast } from "sonner"
+
 /* async function getData(): Promise<Transaction[]> {
   // Fetch data from your API here.
   return [
@@ -34,6 +39,9 @@ import { DownloadIcon } from "lucide-react"
 export default  function DemoPage() {
     const { address, isConnecting, isDisconnected } = useAccount()
     const {error, loading, transactions, refreshTransactions} = useAllTransactions()
+    const [excelData, setexcelData] = useState([]);
+    const [excelDataResponse, setexcelDataResponse] = useState([]);
+    const [isUpdating, setisUpdating] = useState(false);
 
 //  const data = await getData()
 const downloadFile = (dataType:String) => {
@@ -57,7 +65,7 @@ const downloadFile = (dataType:String) => {
    
   ]
   let settings = {
-    fileName: "MySpreadsheet",
+    fileName: "DDI_Transactions",
   }
   xlsx(data, settings)
 }
@@ -76,16 +84,92 @@ const sortByDate = (trxs: any) => {
 
 
 function filterData(objectArray: any[], targetType: any) {
-  return objectArray ? objectArray.filter((obj: { type: any }) => obj.type === targetType) : [];
+  return objectArray ? objectArray.filter((obj: { type: any, status:any }) => obj.type === targetType && obj.status == 'pending') : [];
 }
 
+const readExcel = (file: any) => {
 
+  try {
+     const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+      fileReader.onload = (e) => {
+          const bufferArray = e.target.result;
+          const wb = excel.read(bufferArray, {
+              type: "buffer"
+          });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          const data = excel.utils.sheet_to_json(ws);
+          //console.log(data);
+          resolve(data);
+      };
+      fileReader.onerror = (error) => {
+          reject(error);
+      };
+  });
+  promise.then((d) => {
 
+      setexcelData(d);
+  });
+  } catch (error) {
+    console.log(error)
+  }
+
+ 
+};
+
+const handleUpdateStatus = async (e) => {
+  e.preventDefault();
+  setisUpdating(true)
+  while(isUpdating){
+      toast.info("Updating Status. Please wait! :)", {
+              
+    action: {
+      label: "ok",
+      onClick: () => console.log("ok"),
+      
+    },
+  
+  })
+  }
+
+  try {
+    const res = await fetch('/api/transactions/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: excelData }),
+    });
+    const data = await res.json();
+    setexcelDataResponse(data.message);
+    await refreshTransactions()
+    setisUpdating(false)
+  } catch (error) {
+    setisUpdating(false)
+    console.error('Error:', error);
+  }
+};
 
 
   return (
-    <div className="container mx-auto py-10 w-full bg-[#EFEFEF]">
-  <div className="flex justify-end py-4 gap-2">
+    <div className=" px-52 mx-auto py-10 w-full bg-[#EFEFEF]">
+  <div className="flex justify-end py-4 gap-2 ">
+
+ <div className="flex gap-1"><Input id="statusSheet" type="file" className=" rounded-full bg-black" 
+onChange={(e) => {
+  const file = e.target.files[0] ;
+  readExcel(file);
+
+}}
+/><Button className=" flex gap-2 rounded-full cursor-pointer bg-teal-500" variant={'outline'} onClick={handleUpdateStatus}>
+  {isUpdating ? <> <Loader2Icon className="animate animate-spin" /> Updating </> : <>Update Status</>}
+  </Button></div>
+
+
+
+
     <Button className=" flex gap-2 rounded-full " variant={'outline'} onClick={(e)=>{ e.preventDefault() 
       refreshTransactions()}}>
       <ReloadIcon className="hover:animate-spin" /> Refresh
