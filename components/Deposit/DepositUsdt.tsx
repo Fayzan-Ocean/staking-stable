@@ -284,7 +284,7 @@ const DepositUsdt = () => {
         <CardTitle>USDT</CardTitle>
       
       </CardHeader>
-      <CardContent className="flex flex-col justify-between text-sm text-black font-medium  w-full">
+      <CardContent className="flex flex-col justify-between text-sm text-black font-medium  w-full sm:p-0 md:p-6 lg:p-8">
         <div className="flex justify-between">
             <p className="flex justify-start text-sm pl-2 pb-2">Amount</p>
             <p className="flex justify-start text-sm text-black font-medium pl-2 pb-2"> <span className="flex gap-1 mr-2">
@@ -313,11 +313,11 @@ const DepositUsdt = () => {
 
             <div className="flex gap-1">
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer " onClick={()=>{
-              setUsdt(usdt+adder)
+              setUsdt(usdt+100)
               }}> <ChevronUpIcon  width={18}/></div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
             onClick={()=>{
-              usdt-adder > 100 ? setUsdt(usdt-adder) : null
+              usdt-100 >= 100 ? setUsdt(usdt-100) : null
               }}
               > <ChevronDownIcon width={18} /></div></div>
             
@@ -327,15 +327,15 @@ const DepositUsdt = () => {
         </div>
         <div className="flex gap-4 py-2 justify-center flex-wrap">
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(100)} >x100</Button>
+              onClick={()=>setUsdt(Number(usdt)+100)} >+100</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(200)}>x200</Button>
+              onClick={()=>setUsdt(Number(usdt)+200)}>+200</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(500)}>x500</Button>
+              onClick={()=>setUsdt(Number(usdt)+500)}>+500</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(1000)}>x1000</Button>
+              onClick={()=>setUsdt(Number(usdt)+1000)}>+1000</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(5000)}>x5000</Button>
+              onClick={()=>setUsdt(Number(usdt)+5000)}>+5000</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
               onClick={()=>setUsdt(100)}><RefreshCwIcon /></Button>
             </div>
@@ -352,11 +352,11 @@ const DepositUsdt = () => {
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdt || Number(balanceUSDT?.data?.formatted)<0} onClick={()=>{ writeUsdt?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdt || Number(balanceUSDT?.data?.formatted)<=0} onClick={()=>{ writeUsdt?.()
 
         //setisDepositingUsdc(true)
         }} >
-          <RocketIcon className="mr-2 h-4 w-4 " /> {Number(balanceUSDT?.data?.formatted)<0 ? ":( You're out of USDT" : "Deposit"} 
+          <RocketIcon className="mr-2 h-4 w-4 " /> {Number(balanceUSDT?.data?.formatted)<=0 ? ":( You're out of USDT" : "Deposit"} 
           </Button>
           </>}    
 

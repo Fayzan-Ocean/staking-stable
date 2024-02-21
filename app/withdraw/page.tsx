@@ -145,14 +145,14 @@ const page = () => {
 
             <div className='flex justify-center'>
             <TabsContent value="usdc" className='w-full'>
-                <div className='flex justify-center w-full px-6 sm:px-10'>
+                <div className='flex justify-center w-full sm:px-2 md:px-4 lg:px-24'>
                 {/* Content for USDC */}
                 <WithdrawUsdc />
                 </div>
             </TabsContent>
 
             <TabsContent value="usdt" className='w-full'>
-                <div className='flex justify-center w-full px-6 sm:px-10'>
+                <div className='flex justify-center w-full sm:px-2 md:px-4 lg:px-24'>
                 {/* Content for USDT */}
                 <WithdrawUsdt />
                 </div>

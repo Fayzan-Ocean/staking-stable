@@ -287,7 +287,7 @@ const DepositUsdc = () => {
         <CardTitle>USDC</CardTitle>
       
       </CardHeader>
-      <CardContent className="flex flex-col justify-between text-sm text-black font-medium  w-full">
+      <CardContent className="flex flex-col justify-between text-sm text-black font-medium  w-full sm:p-0 md:p-6 lg:p-8">
         <div className="flex justify-between">
             <p className="flex justify-start text-sm pl-2 pb-2">Amount</p>
             <p className="flex justify-start text-sm text-black font-medium pl-2 pb-2"> <span className="flex gap-1 mr-2">
@@ -318,11 +318,11 @@ const DepositUsdc = () => {
 
             <div className="flex gap-1">
               <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer" onClick={()=>{
-                setUsdc((Number(usdc)+adder))
+                setUsdc((Number(usdc)+100))
                 }}> <ChevronUpIcon  width={18}/></div> 
               <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
               onClick={()=>{
-                usdc-adder > 100 ? setUsdc(Number(usdc)-adder) : null
+                usdc-100 >= 100 ? setUsdc(Number(usdc)-100) : null
                 }}
                 > <ChevronDownIcon width={18} /></div>     
             </div>
@@ -334,15 +334,15 @@ const DepositUsdc = () => {
 
             <div className="flex gap-4 py-2 justify-center flex-wrap">
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(100)} >x100</Button>
+              onClick={()=>setUsdc(Number(usdc)+100)} >+100</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(200)}>x200</Button>
+              onClick={()=>setUsdc(Number(usdc)+200)}>+200</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(500)}>x500</Button>
+              onClick={()=>setUsdc(Number(usdc)+500)}>+500</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(1000)}>x1000</Button>
+              onClick={()=>setUsdc(Number(usdc)+1000)}>+1000</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
-              onClick={()=>setAdder(5000)}>x5000</Button>
+              onClick={()=>setUsdc(Number(usdc)+5000)}>+5000</Button>
               <Button variant={'outline'} className="rounded-full bg-white"
               onClick={()=>setUsdc(100)}><RefreshCwIcon /></Button>
             </div>

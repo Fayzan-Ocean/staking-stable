@@ -51,7 +51,7 @@ const page = () => {
         <div className="sm:w-full md:w-2/3 p-8">
         <Tabs defaultValue="usdc" className="w-full border rounded-2xl p-8">
 
-            <div className='flex justify-start text-lg sm:px-10'>
+            <div className='flex justify-start text-lg sm:px-2 md:px-10 '>
             <TabsList className='flex justify-start gap-2  sm:px-6'>
                         <TabsTrigger value="usdc" className='text-xs font-medium gap-1 text-black border rounded-lg p-2'
     
@@ -145,14 +145,14 @@ const page = () => {
 
             <div className='flex justify-center'>
             <TabsContent value="usdc" className='w-full'>
-                <div className='flex justify-center w-full px-6 sm:px-10'>
+                <div className='flex justify-center w-full sm:px-2 md:px-4 lg:px-24'>
                 {/* Content for USDC */}
                 <DepositUsdc />
                 </div>
             </TabsContent>
 
             <TabsContent value="usdt" className='w-full'>
-                <div className='flex justify-center w-full px-6 sm:px-10'>
+                <div className='flex justify-center w-full sm:px-2 md:px-4 lg:px-24'>
                 {/* Content for USDT */}
                 <DepositUsdt />
                 </div>
