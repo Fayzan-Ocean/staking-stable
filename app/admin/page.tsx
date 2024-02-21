@@ -303,7 +303,36 @@ const WithdrawCards = () => {
 
 
 
+const downloadFile = (dataType:String) => {
+    let data = [
+      {
+        sheet: "Staking",
+        columns: [
+          { label: "ID", value: "id" }, // Top level data
+          { label: "Type", value: "type" }, // Custom format
+          { label: "Amount", value: "amount" }, // Custom format
+          { label: "Status", value: "status" }, // Custom format
+          { label: "Token", value: "token" }, // Custom format
+          { label: "Network", value: "network" }, // Custom format
+          { label: "Request", value: "request" }, // Custom format
+          { label: "Fee", value: "fee" }, // Custom format
+          { label: "Distributed", value: "distributed" }, // Custom format
+          { label: "Trx Hash", value: "trxHash" }, // Custom format
+        ],
+        content: dataType == 'all' ? transactions : (dataType == 'deposit' ? filterData(transactions,'deposit') : filterData(transactions,'withdraw')),
+      }
+     
+    ]
+    let settings = {
+      fileName: "MySpreadsheet",
+    }
+    xlsx(data, settings)
+  }
 
+  function filterData(objectArray: any[], targetType: any) {
+    return objectArray ? objectArray.filter((obj: { type: any, status:any }) => obj.type === targetType && (targetType == 'withdraw' ? obj.status == 'pending' : obj.status == 'success')) : [];
+  }
+  
     
     
 
@@ -576,33 +605,3 @@ export default WithdrawCards
 
 
 //  const data = await getData()
-const downloadFile = (dataType:String) => {
-    let data = [
-      {
-        sheet: "Staking",
-        columns: [
-          { label: "ID", value: "id" }, // Top level data
-          { label: "Type", value: "type" }, // Custom format
-          { label: "Amount", value: "amount" }, // Custom format
-          { label: "Status", value: "status" }, // Custom format
-          { label: "Token", value: "token" }, // Custom format
-          { label: "Network", value: "network" }, // Custom format
-          { label: "Request", value: "request" }, // Custom format
-          { label: "Fee", value: "fee" }, // Custom format
-          { label: "Distributed", value: "distributed" }, // Custom format
-          { label: "Trx Hash", value: "trxHash" }, // Custom format
-        ],
-        content: dataType == 'all' ? transactions : (dataType == 'deposit' ? filterData(transactions,'deposit') : filterData(transactions,'withdraw')),
-      }
-     
-    ]
-    let settings = {
-      fileName: "MySpreadsheet",
-    }
-    xlsx(data, settings)
-  }
-
-  function filterData(objectArray: any[], targetType: any) {
-    return objectArray ? objectArray.filter((obj: { type: any }) => obj.type === targetType) : [];
-  }
-  

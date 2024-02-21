@@ -312,7 +312,7 @@ const DepositUsdt = () => {
             }} className=" w-[90%] border-0 shadow-none hover:shadow-none hover:border-0 focus:shadow-none focus-within:border-0 focus-visible:ring-0 text-black text-4xl appearance-none pointer-events-none"/>
 
             <div className="flex gap-1">
-            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer " onClick={()=>{
+            <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer z-50" onClick={()=>{
               setUsdt(usdt+100)
               }}> <ChevronUpIcon  width={18}/></div> 
             <div className="rounded-full px-1 border-2 hover:bg-black hover:text-white hover:cursor-pointer "
@@ -352,7 +352,7 @@ const DepositUsdt = () => {
           Please wait
         </Button>
         </> : <>
-        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdt || Number(balanceUSDT?.data?.formatted)<=0} onClick={()=>{ writeUsdt?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={Number(balanceUSDT?.data?.formatted)<0} onClick={()=>{ writeUsdt?.()
 
         //setisDepositingUsdc(true)
         }} >

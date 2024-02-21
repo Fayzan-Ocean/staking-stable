@@ -418,7 +418,7 @@ const DepositUsdc = () => {
         </Button>
         </> : 
         <>
-        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={!writeUsdcApprove || Number(balanceUSDC?.data?.formatted)<=100} onClick={()=>{ writeUsdcApprove?.()
+        <Button className="flex w-full bg-black text-white hover:bg-slate-900 rounded-full" disabled={ Number(balanceUSDC?.data?.formatted)<100} onClick={()=>{ writeUsdcApprove?.()
 
         //setisDepositingUsdc(true)
         }} >
