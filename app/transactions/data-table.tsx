@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
         return <a href={networkData.find((i)=>{return i.chainId == cell.row.original.network})?.explorer + `tx/`+ cell.renderValue()}  target="_blank" className="flex gap-1 align-middle items-center bg-black text-white py-1 pl-2 rounded-md text-center items-center">Trx Hash<Link1Icon /></a> 
     }
     if(cell.column.columnDef.accessorKey == 'network'){
-        return cell.renderValue() ? <> <Image src={MaticIcon} alt="Matic Icon" width={24} height={24} /></> : <> <Image src={EthIcon} alt="Ethereum Icon" width={24} height={24} /></>
+        return cell.renderValue() ==137 ? <> <Image src={MaticIcon} alt="Matic Icon" width={24} height={24} /></> : <> <Image src={EthIcon} alt="Ethereum Icon" width={24} height={24} /></>
     }
     if(cell.column.columnDef.accessorKey == 'status'){
       return cell.renderValue() == 'success'  ? <> <span className=" bg-green-700 px-1 rounded-md align-middle text-center text-white py-1">Success</span></> : <> <span className=" bg-yellow-700 px-1 rounded-md align-middle text-center text-white py-1">Pending</span></>
