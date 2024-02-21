@@ -296,6 +296,11 @@ const WithdrawCards = () => {
       }
     };
 
+    const adminWallets = [
+      "0xE7EC76C165b915C24928d1c11F4C073b8992F296",
+      "0x7496E853013eE234301C80848C2e4945f2a52980"
+    ]
+
 
 
 
@@ -303,6 +308,8 @@ const WithdrawCards = () => {
     
 
   return (
+
+    address && adminWallets.includes(address) ?
     <>  
     
     <div className="flex flex-col md:flex-row w-full h-full n items-center xl:p-24 p-8 lg:p-24 md:p-24 bg-black text-white gap-10 md:justify-center align-middle  md:items-center sm:text-center">
@@ -558,7 +565,8 @@ onChange={(e) => {
 
   
   </>
-  
+  :
+   null
 
   
   )
