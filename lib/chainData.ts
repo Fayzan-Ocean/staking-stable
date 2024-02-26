@@ -1,9 +1,9 @@
 export const networkData = [
     {
         chainId: 1,
-        usdcAddress:"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-        usdtAddress:'0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-        dappContract:'0x5FA57B0B7A27181EFa15c60Ce8d4ef296270AE23',
+        usdcAddress:"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        usdtAddress:'0xdAC17F958D2ee523a2206206994597C13D831ec7',
+        dappContract:'0x0defeE24d392518018f0737CBf95EE7D9FD2971A',
         explorer:'http://etherscan.com/'
     },
     {
